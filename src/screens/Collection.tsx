@@ -5,7 +5,7 @@ import { GameWithDate, getUserLists } from '../services/auth/firebase';
 import Loading from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import { listColors } from '../data/ListMaps';
+import { listColors, listSort } from '../data/ListMaps';
 import SearchBar from '../components/SearchBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { getRelativeTime } from '../utils/dateTime';
@@ -72,7 +72,7 @@ const AllGames = ({ navigation }: AllGamesProps) => {
 
             <TouchableOpacity style={styles.sortButton} onPress={toggleSortCriteria}>
                 <Icon name="arrow-right-arrow-left" size={14} color="#ebebeb" style={{transform: [{ rotate: '90deg'}]}}/>
-                <Text style={styles.sortText}>{sortCriteria}</Text>
+                <Text style={styles.sortText}>{listSort[sortCriteria]}</Text>
             </TouchableOpacity>
 
             <FlatList
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     image: {
         width: 50,
         height: 50,
-        borderRadius: 4
+        borderRadius: 2
     },
     gameDetails: {
         marginLeft: 10,
@@ -148,11 +148,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginRight: 10
     },
-    sortContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 10
-    },
     sortButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -163,7 +158,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         fontSize: 14,
         color: '#e9e9e9',
-        fontWeight: 'bold',
+        fontWeight: '900',
         marginLeft: 5
     },
 });

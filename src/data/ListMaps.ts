@@ -32,3 +32,9 @@ export const listColors: { [key: string]: string } ={
     wishlist: '#fc036b',
     completed: '#17fc03',
 }
+
+export const listSort: { [key: string]: string } ={
+    name: 'Name',
+    addedDate: 'Date Added',
+    listName: 'List',
+} 

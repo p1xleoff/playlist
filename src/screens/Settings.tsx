@@ -6,7 +6,8 @@ import {
   ScrollView,
   Image,
   Linking,
-  Pressable
+  Pressable,
+  TouchableOpacity
 } from 'react-native';
 import React, { useState, useRef } from 'react';
 
@@ -25,12 +26,14 @@ import { signOut } from '../services/auth/firebase';
 import Card from '../components/Card';
 import { Separator, Badge, SettingsLink, RadioGroup } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
+import { useGameCount } from '../hooks/listHooks';
 
 type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
 // const sheetRef = useRef<BottomSheetMethods>(null);
 
 const Settings = ({ navigation }: SettingsProps) => {
+  const { totalGames, loading } = useGameCount();
 
   //actions sheet
   const sheetRef = useRef<SheetHandle>(null);
@@ -41,13 +44,13 @@ const Settings = ({ navigation }: SettingsProps) => {
   //signout function
   const handleSignOut = async () => {
     try {
-        await signOut();
-        // navigation.navigate('Login'); //nav broken, throws payload was not handled by any nav
+      await signOut();
+      // navigation.navigate('Login'); //nav broken, throws payload was not handled by any nav
     } catch (error) {
-        console.error('Error signing out', error);
-        // handle errors
+      console.error('Error signing out', error);
+      // handle errors
     }
-};
+  };
 
   const logging = () => {
     console.log('pressed!');
@@ -102,7 +105,11 @@ const Settings = ({ navigation }: SettingsProps) => {
                   <Text style={styles.text}>July 16, 2024</Text>
                 </Badge>
                 <Badge>
-                  <Text style={styles.text}>11 Games</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Collection')}>
+                    <Text style={styles.text}>
+                      {totalGames ? `${totalGames} Games` : 'NA'}
+                    </Text>
+                  </TouchableOpacity>
                 </Badge>
               </View>
             </Card>

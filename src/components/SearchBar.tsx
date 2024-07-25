@@ -1,0 +1,106 @@
+import React, { useState, useRef } from 'react';
+import { View, TextInput, StyleSheet, Pressable, Keyboard } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '../routes/Navigator';
+
+interface SearchBarProps {
+  searchIcon?: string;
+  clearIcon?: string;
+  exitIcon?: string;
+  onExitPress?: () => void;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  autoFocus?: boolean;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  searchIcon = "magnify",
+  clearIcon = "close",
+  exitIcon = "arrow-left",
+  onExitPress,
+  value,
+  onChangeText,
+  autoFocus
+}: SearchBarProps) => {
+
+  const [inputValue, setInputValue] = useState<string>(value ?? '');
+  const inputRef = useRef<TextInput>(null);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  const handleChangeText = (text: string) => {
+    setInputValue(text);
+    onChangeText && onChangeText(text);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    onChangeText && onChangeText('');
+  };
+
+  const handleExitPress = () => {
+    handleClear();
+    Keyboard.dismiss();
+    inputRef.current?.blur();
+    // onExitPress && onExitPress();
+    navigation.goBack();
+  }
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    navigation.navigate('Search');
+  }
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  }
+
+  return (
+    <View style={styles.container}>
+      <Pressable onPress={handleExitPress}>
+        <Icon name={isFocused || inputValue.length > 0 ? exitIcon : searchIcon} size={26} color="#acacac" style={styles.icon} />
+      </Pressable>
+      <TextInput
+        style={styles.input}
+        value={inputValue}
+        onFocus={handleFocus}
+        // onBlur={handleBlur}
+        onChangeText={handleChangeText}
+        placeholder="Search..."
+        placeholderTextColor="#acacac"
+        cursorColor='#fff'
+        autoFocus={autoFocus}
+      />
+      {inputValue.length > 0 && (
+        <Pressable onPress={handleClear}>
+          <Icon name={clearIcon} size={26} color="#acacac" style={styles.icon} />
+        </Pressable>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#252525',
+    borderRadius: 25,
+    paddingHorizontal: 10,
+    elevation: 5,
+    // marginBottom: 20,
+    width: '100%',
+  },
+  icon: {
+    marginHorizontal: 5,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#fff'
+  },
+});
+
+export default SearchBar;

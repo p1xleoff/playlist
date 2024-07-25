@@ -1,0 +1,160 @@
+// Discover.tsx
+
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, useWindowDimensions, FlatList, ActivityIndicator } from 'react-native';
+import { TabView, SceneMap, TabBar, Route } from 'react-native-tab-view';
+import { getUserLists, getGamesInList } from '../services/auth/firebase'; // Update path accordingly
+import { GameProps } from '../services/auth/firebase'; // Adjust import based on your file structure
+import auth from '@react-native-firebase/auth'
+
+const ListRoute = ({ listName, userId }: { listName: string; userId: string }) => {
+  const [games, setGames] = useState<GameProps[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const games = await getGamesInList(userId, listName);
+        setGames(games);
+      } catch (error) {
+        console.error('Error fetching games', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, [listName, userId]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  return (
+    <View style={styles.scene}>
+      <FlatList
+        data={games}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.gameItem}>
+            <Text style={styles.gameTitle}>{item.name}</Text>
+            {/* Add more details or components as needed */}
+          </View>
+        )}
+      />
+    </View>
+  );
+};
+
+const Discover = () => {
+  const layout = useWindowDimensions();
+  const [index, setIndex] = React.useState(0);
+  const [routes, setRoutes] = React.useState<Route[]>([]);
+  const [userId, setUserId] = React.useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      // Fetch the current user ID and lists
+      const user = auth().currentUser;
+      if (user) {
+        setUserId(user.uid);
+        try {
+          const lists = await getUserLists(user.uid);
+          setRoutes(lists.map(list => ({ key: list.id, title: list.id })));
+        } catch (error) {
+          console.error('Error fetching lists', error);
+        }
+      }
+    };
+
+    fetchLists();
+  }, []);
+
+  const renderScene = ({ route }: { route: Route }) => (
+    <ListRoute listName={route.key} userId={userId ?? ''} />
+  );
+
+  const renderTabBar = (props: any) => (
+    <TabBar
+      {...props}
+      indicatorStyle={styles.indicator}
+      style={styles.tabBar}
+      renderLabel={({ route, focused }) => (
+        <View style={[styles.tabButton, focused && styles.tabButtonFocused]}>
+          <Text style={styles.tabText}>{route.title}</Text>
+        </View>
+      )}
+    />
+  );
+
+  return (
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{ width: layout.width }}
+      renderTabBar={renderTabBar}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  scene: {
+    flex: 1,
+    padding: 16,
+  },
+  gameItem: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  gameTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  tabBar: {
+    backgroundColor: '#000000',
+  },
+  tabButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabButtonFocused: {
+    borderBottomWidth: 2,
+    borderBottomColor: 'blue',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#ffffff',
+  },
+  indicator: {
+    backgroundColor: 'transparent',
+  },
+});
+
+export default Discover;
+export const getUserLists = async (userId: string) => {
+    try {
+      const snapshot = await firestore().collection('users').doc(userId).collection('lists').get();
+      const lists = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return lists;
+    } catch (error) {
+      console.error('Error fetching user lists', error);
+      throw error;
+    }
+  };
+  
+  export const getGamesInList = async (userId: string, listName: string) => {
+    try {
+      const listRef = firestore().collection('users').doc(userId).collection('lists').doc(listName);
+      const doc = await listRef.get();
+      if (doc.exists) {
+        return doc.data()?.games || [];
+      } else {
+        return [];
+      }
+    } catch (error) {
+      console.error(`Error fetching games in list ${listName}`, error);
+      throw error;
+    }
+  };

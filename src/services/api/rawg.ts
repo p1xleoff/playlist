@@ -11,6 +11,17 @@ export const fetchGames = async () => {
   return response.data.results;
 }
 
+export const discoverGames = async (ordering: string) => {
+  console.log(`Fetching games with order: ${ordering}`);
+  const response = await axios.get(`${BASE_URL}/games`, {
+    params: {
+      key: API_KEY,
+      ordering,
+    },
+  });
+  return response.data.results;
+};
+
 export const searchGames = async (query: string) => {
   const response = await axios.get(`${BASE_URL}/games?key=${API_KEY}&search=${query}`);
   return response.data.results;
@@ -46,15 +57,3 @@ export const fetchSeriesGames = async (gameId: number) => {
   return response.data.results;
 }
 
-
-// export const fetchGames = async () => {
-//   return gameData[0].results;
-// }
-
-// export const searchGames = async (query: string) => {
-//   const lowercasedQuery = query.toLowerCase();
-//   const results = gameData[0].results.filter(game =>
-//     game.name.toLowerCase().includes(lowercasedQuery)
-//   );
-//   return results;
-// }

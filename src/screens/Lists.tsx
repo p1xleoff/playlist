@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, FlatList, Image, Pressable, Button, TouchableOp
 import React, { useEffect, useRef, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { deleteGameFromList, getCurrentUser, getUserLists, moveGameToList } from '../services/auth/firebase';
-import { GameWithDate } from '../services/auth/firebase'; // Update the import
+import { ReGame } from '../services/auth/firebase'; // Update the import
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import Loading from '../components/Loading';
+import {Loading} from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import { getRelativeTime } from '../utils/dateTime';
@@ -14,6 +14,7 @@ import Sheet, { SheetHandle } from '../components/ActionSheet';
 import Snackbar from 'react-native-snackbar';
 import { listIcons, listDesc, listColors } from '../data/ListMaps';
 import { Separator } from '../components/Utils';
+import Header from '../components/Header';
 
 type ListsProps = NativeStackScreenProps<RootStackParamList, 'Lists'>;
 
@@ -26,7 +27,7 @@ const Lists = ({ navigation }: ListsProps) => {
   const [error, setError] = useState<string | null>(null);
   const [index, setIndex] = useState(0);
   const [routes, setRoutes] = useState<{ key: string; title: string }[]>([]);
-  const [selectedGame, setSelectedGame] = useState<GameWithDate | null>(null);
+  const [selectedGame, setSelectedGame] = useState<ReGame | null>(null);
   const [sourceList, setSourceList] = useState<string | null>(null);
 
   const sheetRef = useRef<SheetHandle>(null);
@@ -123,7 +124,7 @@ const Lists = ({ navigation }: ListsProps) => {
             data={lists.find(list => list.id === route.key)?.games || []}
             keyExtractor={(game) => game.id.toString()}
             style={{marginBottom: 60}}
-            renderItem={({ item: game }: { item: GameWithDate }) => (
+            renderItem={({ item: game }: { item: ReGame }) => (
               <View>
                 <TouchableOpacity
                   style={styles.gameCard}
@@ -161,6 +162,7 @@ const Lists = ({ navigation }: ListsProps) => {
   const renderTabBar = (props: any) => (
     <View style={styles.container}>
       <View style={{ paddingHorizontal: 10 }}>
+      <Header title='Your Lists' />
         <SearchBar />
       </View>
       <TabBar
@@ -266,7 +268,6 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: '#000000',
-    marginTop: 10,
   },
   tab: {
     flex: 1,

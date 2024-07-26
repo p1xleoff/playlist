@@ -22,11 +22,16 @@ import { IconSize } from '../utils/constants/enums/iconEnums';
 //other
 import { signOut } from '../services/auth/firebase';
 
+//auth
+import auth from '@react-native-firebase/auth';
+
 //components
 import Card from '../components/Card';
 import { Separator, Badge, SettingsLink, RadioGroup } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { useGameCount } from '../hooks/listHooks';
+import { formatDate } from '../data/Date';
+import { Loading, SmallLoader } from '../components/Loading';
 
 type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
@@ -34,7 +39,9 @@ type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
 const Settings = ({ navigation }: SettingsProps) => {
   const { totalGames, loading } = useGameCount();
-
+  const user = auth().currentUser;
+  const userJoinDate = user?.metadata.creationTime;
+  
   //actions sheet
   const sheetRef = useRef<SheetHandle>(null);
   const themeActions = () => {
@@ -102,12 +109,12 @@ const Settings = ({ navigation }: SettingsProps) => {
               {/* profile badges */}
               <View style={styles.cardBox}>
                 <Badge>
-                  <Text style={styles.text}>July 16, 2024</Text>
+                  <Text style={styles.text}>{userJoinDate ? formatDate(userJoinDate) : (<SmallLoader />)}</Text>
                 </Badge>
                 <Badge>
                   <TouchableOpacity onPress={() => navigation.navigate('Collection')}>
                     <Text style={styles.text}>
-                      {totalGames ? `${totalGames} Games` : 'NA'}
+                      {totalGames ? `${totalGames} Games` : (<SmallLoader />)}
                     </Text>
                   </TouchableOpacity>
                 </Badge>

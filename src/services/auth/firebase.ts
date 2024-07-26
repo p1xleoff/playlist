@@ -16,7 +16,7 @@ export type GameProps = {
     released: string;
     // Add more fields as needed
 }
-export interface GameWithDate extends Game {
+export interface ReGame extends Game {
     addedDate: Date;
 }
 
@@ -151,7 +151,7 @@ export const deleteGameFromList = async (userId: string, listName: string, gameI
 
 
 
-export const moveGameToList = async (userId: string, sourceList: string, targetList: string, game: GameWithDate) => {
+export const moveGameToList = async (userId: string, sourceList: string, targetList: string, game: ReGame) => {
     try {
         const listRef = firestore().collection('users').doc(userId).collection('lists');
 
@@ -160,7 +160,7 @@ export const moveGameToList = async (userId: string, sourceList: string, targetL
         const targetListDoc = await listRef.doc(targetList).get();
 
         // Update the source list to remove the game
-        const updatedSourceGames = sourceListDoc.data()?.games.filter((g: GameWithDate) => g.id !== game.id) || [];
+        const updatedSourceGames = sourceListDoc.data()?.games.filter((g: ReGame) => g.id !== game.id) || [];
 
         // Update the target list to add the game with the new addedDate
         const updatedTargetGames = [

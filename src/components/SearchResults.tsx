@@ -7,7 +7,7 @@ import { platformIcons } from '../data/iconMaps';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import Loading from './Loading';
+import {Loading} from './Loading';
 
 interface SearchResultsProps {
   query: string;

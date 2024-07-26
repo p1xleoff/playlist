@@ -9,12 +9,13 @@ import {
   TextInput,
   TextInputProps
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconSize } from '../utils/constants/enums/iconEnums';
 
 import { useField } from 'formik';
+import { useNavigation } from '@react-navigation/native';
 
 //SEPARATOR
 type SeparatorProps = {
@@ -103,9 +104,9 @@ const TxtInput: React.FC<InputProps> = ({ label, name, iconName, ...props }) => 
   const [field, meta] = useField(name);
   return (
     <View style={styles.inputContainer}>
-      <View style={{flexDirection: 'row'}}>
-      {/* {iconName && <Icon name={iconName} size={20} color={'#000'} />} */}
-      <Text style={styles.label}>{label}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        {/* {iconName && <Icon name={iconName} size={20} color={'#000'} />} */}
+        <Text style={styles.label}>{label}</Text>
       </View>
 
       <TextInput style={styles.input} onChangeText={field.onChange(name)} onBlur={field.onBlur(name)} value={field.value} {...props} cursorColor='#000000' />
@@ -126,12 +127,27 @@ type ButtonProps = {
 };
 const Button = ({ style, title, onPress }: ButtonProps) => {
   return (
-    <Pressable onPress={onPress} style={[styles.button, style]}>
-        <Text style={styles.buttonText}>{title}</Text>
-    </Pressable>
+    <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
   );
 };
 
+
+////////////RELOAD BUTTON
+type ReloadProps = {
+  onPress: () => void;
+}
+const Reload = ({ onPress }: ReloadProps) => {
+  const [reload, setReload] = useState(false);
+  return (
+    <View>
+      <TouchableOpacity onPress={onPress}>
+        <Text style={styles.radioText}>Reload</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 
 const styles = StyleSheet.create({
@@ -245,4 +261,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button };
+export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, Reload };

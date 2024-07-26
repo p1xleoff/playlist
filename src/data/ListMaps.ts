@@ -26,15 +26,22 @@ export const listDesc: { [key: string]: string } = {
     completed: 'Completed Games',
 };
 
-export const listColors: { [key: string]: string } ={
+export const listColors: { [key: string]: string } = {
     backlog: '#fc4503',
     playlist: '#0398fc',
     wishlist: '#fc036b',
     completed: '#17fc03',
-}
+};
 
-export const listSort: { [key: string]: string } ={
+export const listSort: { [key: string]: string } = {
     name: 'Name',
     addedDate: 'Date Added',
     listName: 'List',
-} 
+};
+
+export const dashList: { [key: string]: string } = {
+    backlog: 'Games to Play Next',
+    playlist: 'Currently Playing',
+    completed: 'Recently Completed',
+    wishlist: 'Wishlisted',
+};

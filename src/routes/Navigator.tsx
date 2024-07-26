@@ -21,7 +21,7 @@ import Collection from '../screens/Collection';
 
 // Types
 import { Franchise, Game } from '../types/Game';
-import Loading from '../components/Loading';
+import { Loading } from '../components/Loading';
 
 export type RootStackParamList = {
   Base: undefined;
@@ -52,8 +52,8 @@ const BottomTabNavigator = () => (
           iconName = focused ? 'home' : 'home-outline';
         } else if (route.name === 'Lists') {
           iconName = focused ? 'format-list-text' : 'format-list-checks';
-        } else if (route.name === 'Settings') {
-          iconName = focused ? 'cog' : 'cog-outline';
+        } else if (route.name === 'Discover') {
+          iconName = focused ? 'view-dashboard' : 'view-dashboard-outline';
         } else {
           iconName = 'help';
         }
@@ -75,9 +75,9 @@ const BottomTabNavigator = () => (
       },
     })}
   >
-    <Tab.Screen name="Home" component={Home} />
+    <Tab.Screen name="Home" component={Home} options={{ headerShown: false }}/>
     <Tab.Screen name="Lists" component={Lists} options={{ headerShown: false }} />
-    <Tab.Screen name="Settings" component={Settings} />
+    <Tab.Screen name="Discover" component={Discover} options={{ headerShown: false }}/>
   </Tab.Navigator>
 );
 
@@ -96,6 +96,7 @@ const Navigator: React.FC<NavigatorProps> = ({ user }) => {
               <Stack.Screen name="Account" component={Account} />
               <Stack.Screen name="GameDetails" component={GameDetails} options={{ headerShown: false }} />
               <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
+              <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
               <Stack.Screen name="Discover" component={Discover} options={{ headerShown: false }} />
               <Stack.Screen name="Lists" component={Lists} options={{ headerShown: false }} />
               <Stack.Screen name="Collection" component={Collection} options={{ headerShown: false }} />

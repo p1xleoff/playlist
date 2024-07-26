@@ -1,21 +1,20 @@
-import { StyleSheet, Text, View, FlatList, Dimensions, Image, NativeScrollEvent, NativeSyntheticEvent, Pressable } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { getRelativeTime } from '../utils/dateTime';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../routes/Navigator';
+import { ReGame } from '../services/auth/firebase';
 
-interface Game {
-    id: number;
-    title: string;
-    imageUrl: string;
+interface CarouselProps {
+    games: ReGame[];
 }
 
-interface GameCarouselProps {
-    games: Game[];
-}
-
-const GameCarousel: React.FC<GameCarouselProps> = ({ games }) => {
+const Carousel: React.FC<CarouselProps> = ({ games }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const itemWidth = Dimensions.get('window').width * 0.9;
-    const flatListRef = useRef<FlatList<Game>>(null);
-
+    const itemWidth = Dimensions.get('window').width * 0.87;
+    const flatListRef = useRef<FlatList<ReGame>>(null);
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+    
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetX = event.nativeEvent.contentOffset.x;
         const index = Math.round(offsetX / itemWidth);
@@ -28,89 +27,95 @@ const GameCarousel: React.FC<GameCarouselProps> = ({ games }) => {
             setCurrentIndex(index);
         }
     };
-
-    const renderItem = ({ item }: { item: Game }) => (
-        <View style={styles.item}>
-            <Image
-                source={{ uri: item.imageUrl }}
-                style={styles.image}
-            />
-            <Text style={styles.title}>{item.title}</Text>
+    const handleGamePress = (game: ReGame) => {
+        const { addedDate, ...gameDetails } = game;
+        navigation.navigate('GameDetails', { game: gameDetails });
+    };
+    const renderItem = ({ item }: { item: ReGame }) => (
+        <View style={styles.gameItem}>
+            <Image source={{ uri: item.background_image }} style={styles.image} />
+            <TouchableOpacity onPress={() => handleGamePress(item)}
+            >
+            <View style={{marginVertical: 5}}>
+                <Text style={styles.gameTitle} numberOfLines={1}>{item.name}</Text>
+                <Text style={styles.gameDate} numberOfLines={1}>{getRelativeTime(item.addedDate)}</Text>
+            </View>
+            </TouchableOpacity>
         </View>
     );
 
     return (
-        <View style={styles.carouselContainer}>
+        <View style={styles.container}>
             <FlatList
                 data={games}
                 ref={flatListRef}
                 renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id.toString()}
                 pagingEnabled
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
-                decelerationRate='fast'
+                decelerationRate="fast"
                 snapToInterval={itemWidth}
                 snapToAlignment='center'
             />
-
             <View style={styles.indicatorContainer}>
                 {games.map((_, index) => (
-                    <Pressable key={index} onPress={() => handleIndicatorPress(index)}>
-                        <View key={index} style={[styles.indicator, index === currentIndex ? styles.activeIndicator : styles.inactiveIndicator]} ></View>
-                    </Pressable>
+                    <TouchableOpacity key={index} onPress={() => handleIndicatorPress(index)}>
+                        <View
+                            style={[styles.indicator, index === currentIndex ? styles.active : styles.inactive]}></View>
+                    </TouchableOpacity>
                 ))}
             </View>
-
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    carouselContainer: {
+    container: {
         alignItems: 'center',
     },
-    item: {
+    gameItem: {
         width: Dimensions.get('window').width * 0.9,
-        height: 200,
+        height: 240,
         overflow: 'hidden',
-        borderRadius: 5,
-        marginEnd: 10
+        borderRadius: 2,
+        marginEnd: 10,
+    },
+    gameTitle: {
+        fontSize: 18,
+        color: '#ffffff',
+        fontWeight: '900',
+    },
+    gameDate: {
+        fontSize: 16,
+        color: '#afafaf',
+        fontWeight: 'bold',
     },
     image: {
         flex: 1,
         resizeMode: 'cover',
-        borderRadius: 5,
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginTop: 5,
-        color: 'black'
+        borderRadius: 5
     },
     indicatorContainer: {
         flexDirection: 'row',
-        marginTop: 5,
-        alignSelf: 'center'
     },
     indicator: {
         width: 5,
         height: 5,
         borderRadius: 5,
-        marginHorizontal: 5,
+        marginHorizontal: 5
     },
-    activeIndicator: {
-        backgroundColor: '#181818',
-        height: 6,
+    active: {
+        backgroundColor: '#f8f8f8',
         width: 6,
+        height: 6,
     },
-    inactiveIndicator: {
-        backgroundColor: '#9e9e9e'
+    inactive: {
+        backgroundColor: '#9b9b9b',
     },
 })
 
-
-export default GameCarousel;
+export default Carousel;

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames } from "../services/api/rawg";
+import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames } from "../services/api/rawg";
 import { Additions, BaseGame, Franchise, Game, GameStore, Screenshots, SeriesGame, Store } from "../types/Game";
 
 export const useSearchGames = (query: string) => {
@@ -14,6 +14,13 @@ export const useFetchGames = () => {
     return useQuery({
         queryKey: ['games'],
         queryFn: fetchGames,
+    });
+};
+
+export const useDiscoverGames = (ordering: string) => {
+    return useQuery({
+        queryKey: ['discoverGames', ordering],
+        queryFn: () => discoverGames(ordering),
     });
 };
 

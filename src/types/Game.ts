@@ -75,7 +75,7 @@ export interface ParentPlatform {
   };
 }
 
-export interface Franchise {
+export interface Franchise extends Game{
   id: number;
   name: string;
   background_image: string;

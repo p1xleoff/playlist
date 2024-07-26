@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import { GameWithDate, getUserLists } from '../services/auth/firebase';
-import Loading from '../components/Loading';
+import { ReGame, getUserLists } from '../services/auth/firebase';
+import {Loading}from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import { listColors, listSort } from '../data/ListMaps';
@@ -13,7 +13,7 @@ import { getRelativeTime } from '../utils/dateTime';
 type AllGamesProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;
 
 const AllGames = ({ navigation }: AllGamesProps) => {
-    const [allGames, setAllGames] = useState<{ game: GameWithDate, listId: string }[]>([]);
+    const [allGames, setAllGames] = useState<{ game: ReGame, listId: string }[]>([]);
     const [loading, setLoading] = useState(true);
     const [sortCriteria, setSortCriteria] = useState<string>('name');
 

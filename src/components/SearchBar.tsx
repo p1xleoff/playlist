@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 10,
     elevation: 5,
-    // marginBottom: 20,
+    marginBottom: 10,
     width: '100%',
   },
   icon: {

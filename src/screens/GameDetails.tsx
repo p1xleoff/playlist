@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ScreenshotsCarousel from '../components/ScreenshotCarousel';
 import { esrb_rating } from '../data/esrb';
-import GameCard from '../components/GameCard';
+import { GameCard } from '../components/GameCard';
 import { RootStackParamList } from '../routes/Navigator';
 import { Button, Separator } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
@@ -18,6 +18,7 @@ import auth from '@react-native-firebase/auth';
 import { RadioGroup } from '../components/Utils';
 import { listOptions, listLabels } from '../data/ListMaps';
 import Snackbar from 'react-native-snackbar';
+import { Loading } from '../components/Loading';
 
 const GameDetails: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'GameDetails'>>();
@@ -56,12 +57,17 @@ const GameDetails: React.FC = () => {
 
   // Render loading indicator
   if (gameDetailsLoading || screenshotsLoading || storesLoading || additionsLoading || baseGameLoading || seriesLoading) {
-    return <ActivityIndicator size="large" color="#000000" />;
+    return <Loading />;
   }
 
   // Render error message
   if (!gameDetails) {
-    return <Text style={styles.errorText}>Oops! Something went wrong =(</Text>;
+    return (
+      <View style={styles.errorContainer}>
+         <Text style={styles.errorText}>Oops! Something went wrong =(</Text>
+         <Text style={styles.errorText}>Try turning it off and on again</Text>
+      </View>
+    );
   }
 
   // Function to open store link
@@ -368,7 +374,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   image: {
     width: '100%',
@@ -382,8 +388,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#ffffff'
   },
+  errorContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'black',
+  },
   errorText: {
-    color: 'red'
+    color: '#ff3c00',
+    fontWeight: 'bold',
+    fontSize: 22,
   },
   badges: {
     flexDirection: 'row',

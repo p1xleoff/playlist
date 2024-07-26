@@ -1,116 +1,71 @@
-import * as React from 'react';
-import { View, useWindowDimensions, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
+import Header from '../components/Header'
+import SearchBar from '../components/SearchBar'
+import { RootStackParamList } from '../routes/Navigator';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useDiscoverGames, useFetchGames } from '../hooks/gameHooks';
+import { Loading } from '../components/Loading';
+import { DiscoverCard } from '../components/GameCard';
+import Sheet, { SheetHandle } from '../components/ActionSheet';
+import { RadioGroup } from '../components/Utils';
 
-type Route = {
-  key: string;
-  title: string;
-};
-
-type RouteMap = {
-  [key: string]: () => React.ReactElement;
-};
-
-const FirstRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#ff4081' }]}>
-    <Text style={styles.text}>First Route Content</Text>
-  </View>
-);
-
-const SecondRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#673ab7' }]}>
-    <Text style={styles.text}>Second Route Content</Text>
-  </View>
-);
-
-const ThirdRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#673ab7' }]}>
-    <Text style={styles.text}>Third Route Content</Text>
-  </View>
-);
-
-const renderScene: RouteMap = {
-  first: FirstRoute,
-  second: SecondRoute,
-  third: ThirdRoute,
-};
+type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
 const Discover = () => {
-  const layout = useWindowDimensions();
+  const [order, setOrder] = useState('popularity');
+  const { data: games, isLoading, error } = useDiscoverGames(order);
+  const sheetRef = useRef<SheetHandle>(null);
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState<Route[]>([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
-    { key: 'third', title: 'Third' },
-  ]);
+  if (isLoading) return <Loading />;
+  if (error) return <Text>Something went wrong</Text>;
 
-  const renderTabBar = (props: any) => (
-    <TabBar
-      {...props}
-      indicatorStyle={styles.indicator}
-      style={styles.tabBar}
-      renderLabel={({ route, focused }) => (
-        <TouchableOpacity
-          style={[styles.tabButton, focused && styles.tabButtonFocused]}
-          onPress={() => {
-            const index = routes.findIndex(r => r.key === route.key);
-            setIndex(index);
-          }}
-        >
-          <Text style={styles.tabText}>{route.title}</Text>
-        </TouchableOpacity>
-      )}
-    />
-  );
+  const DiscoverSortOptions = [
+    { label: 'Popularity', value: 'popularity' },
+    { label: 'Added', value: 'added' },
+    { label: 'Rating', value: 'rating' },
+    { label: 'Metacritic', value: '-metacritic' },
+    { label: 'Released', value: 'released' },
+    { label: 'Created', value: 'created' },
+    { label: 'Updated', value: 'updated' },
+  ];
+
+  const handleSelect = (value: string) => {
+    setOrder(value);
+  }
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={SceneMap(renderScene)}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-    />
-  );
+    <View style={styles.container}>
+      <Header title='Discover' />
+      <SearchBar />
+      <TouchableOpacity onPress={() => sheetRef.current?.present()}>
+        <Text style={styles.sort}>Sort</Text>
+      </TouchableOpacity>
+      <FlatList
+        data={games}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <DiscoverCard game={item} />}
+      />
+
+      <Sheet ref={sheetRef} title='Order by'>
+        <View>
+          <RadioGroup options={DiscoverSortOptions} selectedOption={order} onChange={handleSelect} />
+        </View>
+      </Sheet>
+    </View>
+  )
 }
 
+
 const styles = StyleSheet.create({
-  scene: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 20,
-    color: 'white',
-  },
-  tabBar: {
     backgroundColor: '#000000',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    height: 40,
-    alignItems: 'center',
-    elevation: 2,
+    paddingHorizontal: 10
   },
-  tabButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabButtonFocused: {
-    borderBottomWidth: 2,
-    borderBottomColor: 'blue',
-  },
-  tabText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  indicator: {
-    backgroundColor: 'transparent',
-  },
-});
-
-
+  sort: {
+    color: 'red',
+    fontSize: 22
+  }
+})
 export default Discover;

@@ -9,6 +9,7 @@ import { Loading } from '../components/Loading';
 import { DiscoverCard } from '../components/GameCard';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { RadioGroup } from '../components/Utils';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
@@ -28,7 +29,7 @@ const Discover = () => {
     { label: 'Metacritic', value: '-metacritic' },
     { label: 'Rating', value: '-rating' },
     { label: 'Released', value: 'released' },
-    { label: 'Added', value: '-added' },
+    // { label: 'Added', value: '-added' },
   ];
 
   const handleSelect = (value: string) => {
@@ -62,13 +63,17 @@ const Discover = () => {
 
   if (isLoading) return <Loading />;
   if (error) return <Text>Something went wrong</Text>;
-
+  const getSortLabel = (value: string) => {
+    const option = DiscoverSortOptions.find(option => option.value === value);
+    return option ? option.label : value;
+  };
   return (
     <View style={styles.container}>
       <Header title="Discover" />
       <SearchBar />
-      <TouchableOpacity onPress={() => sheetRef.current?.present()}>
-        <Text style={styles.sort}>Sort</Text>
+      <TouchableOpacity onPress={() => sheetRef.current?.present()} style={styles.sortButton}>
+        <Icon name="arrow-right-arrow-left" size={14} color="#fdfdfd" style={{ transform: [{ rotate: '90deg' }] }} />
+        <Text style={styles.sortText}>{getSortLabel(order)}</Text>
       </TouchableOpacity>
       <FlatList
         data={sortedGames}
@@ -91,10 +96,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     paddingHorizontal: 10,
   },
-  sort: {
-    color: 'red',
-    fontSize: 22,
-  },
+  sortButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+},
+sortText: {
+    marginRight: 5,
+    fontSize: 18,
+    color: '#e9e9e9',
+    fontWeight: '900',
+    marginLeft: 5
+},
   header: {
     color: 'white',
     fontSize: 22,

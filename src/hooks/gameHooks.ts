@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames } from "../services/api/rawg";
+import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames } from "../services/api/rawg";
 import { Additions, BaseGame, Franchise, Game, GameStore, Screenshots, SeriesGame, Store } from "../types/Game";
 
 export const useSearchGames = (query: string) => {
@@ -14,13 +14,6 @@ export const useFetchGames = () => {
     return useQuery({
         queryKey: ['games'],
         queryFn: fetchGames,
-    });
-};
-
-export const useDiscoverGames = (ordering: string) => {
-    return useQuery({
-        queryKey: ['discoverGames', ordering],
-        queryFn: () => discoverGames(ordering),
     });
 };
 
@@ -64,4 +57,43 @@ export const useFetchSeriesGames = (gameId: number) => {
         queryKey: ['series', gameId],
         queryFn: () => fetchSeriesGames(gameId),
     })
+};
+
+//////DISCOVER STUFF
+
+//get games for discover with default rawg ordering
+export const useDiscoverGames = (ordering: string) => {
+    return useQuery({
+        queryKey: ['discoverGames', ordering],
+        queryFn: () => discoverGames(ordering),
+        enabled: !!ordering, // Only fetch if ordering is truthy
+        refetchOnWindowFocus: true, // Refetch on window focus
+    });
+};
+
+//discover - popular games hook 
+export const usePopularGames = () => {
+    return useQuery({
+        queryKey: ['popularGames'],
+        queryFn: fetchPopularGames,
+        refetchOnWindowFocus: true,
+    });
+};
+
+//discover - upcoming games hook
+export const useUpcomingGames = () => {
+    return useQuery({
+        queryKey: ['upcomingGames'],
+        queryFn: fetchUpcomingGames,
+        refetchOnWindowFocus: true,
+    });
+};
+
+//discover - new games hook
+export const useNewGames = () => {
+    return useQuery({
+        queryKey: ['newGames'],
+        queryFn: fetchNewGames,
+        refetchOnWindowFocus: true,
+    });
 };

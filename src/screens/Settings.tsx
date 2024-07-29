@@ -144,7 +144,7 @@ const Settings = ({ navigation }: SettingsProps) => {
 
             {/* about */}
             <Card>
-              <SettingsLink onPress={logging} iconName="information" title="About" />
+              <SettingsLink onPress={() => navigation.navigate('Dummy')} iconName="information" title="About" />
             </Card>
 
             {/* logOut */}

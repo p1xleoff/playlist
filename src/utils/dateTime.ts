@@ -29,4 +29,25 @@ export const formatMetaDataDate = (dateString: string): string => {
     day: 'numeric',
     year: 'numeric',
   });
-}; 
+};
+
+//get date for API requests
+export const getDateRanges = () => {
+  const getCurrentDate = () => new Date().toISOString().split('T')[0];
+  const getLastYearDate = () => {
+    const lastYear = new Date();
+    lastYear.setFullYear(lastYear.getFullYear() - 1);
+    return lastYear.toISOString().split('T')[0];
+  };
+  const getNextYearDate = () => {
+    const nextYear = new Date();
+    nextYear.setFullYear(nextYear.getFullYear() + 1);
+    return nextYear.toISOString().split('T')[0];
+  };
+
+  return {
+    currentDate: getCurrentDate(),
+    lastYearDate: getLastYearDate(),
+    nextYearDate: getNextYearDate(),
+  };
+};

@@ -4,36 +4,40 @@ import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useDiscoverGames, usePopularGames, useUpcomingGames, useNewGames } from '../hooks/gameHooks';
+import { useDiscoverGames, usePopularGames, useUpcomingGames, useNewGames, useGenres } from '../hooks/gameHooks';
 import { Loading } from '../components/Loading';
 import { DiscoverCard } from '../components/GameCard';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { RadioGroup } from '../components/Utils';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { DiscoverSortOptions, GenreOptions } from '../data/discoverMaps';
 
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
 const Discover = () => {
   const [order, setOrder] = useState('popular');
-  const { data: games, isLoading, error } = useDiscoverGames(order);
-  const { data: popularGames } = usePopularGames();
-  const { data: upcomingGames } = useUpcomingGames();
-  const { data: newGames } = useNewGames();
-  const sheetRef = useRef<SheetHandle>(null);
+  const [genre, setGenre] = useState('');
 
-  const DiscoverSortOptions = [
-    { label: 'Popularity', value: 'popular' },
-    // { label: 'Relevance', value: 'relevance' },
-    { label: 'Upcoming', value: 'upcoming' },
-    { label: 'New', value: 'new' },
-    { label: 'Metacritic', value: '-metacritic' },
-    { label: 'Rating', value: '-rating' },
-    { label: 'Released', value: 'released' },
-    // { label: 'Added', value: '-added' },
-  ];
+  const { data: games, isLoading, error } = useDiscoverGames(order);
+  const { data: popularGames, isLoading: popularLoading, error: popularError } = usePopularGames();
+  const { data: upcomingGames, isLoading: upcomingLoading, error: upconmingError } = useUpcomingGames();
+  const { data: newGames, isLoading: newLoading, error: newError } = useNewGames();
+  const { data: genres, isLoading: genreLoading, error: genreError } = useGenres(order, genre);
+
+  const orderSheet = useRef<SheetHandle>(null);
+  const genreSheet = useRef<SheetHandle>(null);
+
 
   const handleSelect = (value: string) => {
     setOrder(value);
+    setGenre('');
+    orderSheet.current?.dismiss()
+  };
+
+  const handleGenre = (value: string) => {
+    setGenre(value);
+    setOrder('');
+    genreSheet.current?.dismiss()
   };
 
   // Function to shuffle an array randomly
@@ -41,7 +45,7 @@ const Discover = () => {
     return array.sort(() => Math.random() - 0.5);
   };
 
-  // Combine and sort games for the 'relevance' option
+  //combine and sort games for the 'relevance' option
   let sortedGames;
   if (order === 'relevance') {
     const combinedGames = [...(popularGames || []), ...(upcomingGames || []), ...(newGames || [])];
@@ -60,30 +64,63 @@ const Discover = () => {
       return 0;
     });
   }
+  
+  //render loading and error checks
+  if (isLoading || popularLoading || upcomingLoading || newLoading || genreLoading) return <Loading />;
+  if (error || popularError || upconmingError || newError || genreError) return <Text>Something went wrong</Text>;
 
-  if (isLoading) return <Loading />;
-  if (error) return <Text>Something went wrong</Text>;
-  const getSortLabel = (value: string) => {
+  const orderLabel = (value: string) => {
     const option = DiscoverSortOptions.find(option => option.value === value);
     return option ? option.label : value;
   };
+
+  const genreLabel = (value: string) => {
+    const option = GenreOptions.find(option => option.value === value);
+    return option ? option.label : value;
+  }
+
   return (
     <View style={styles.container}>
+
       <Header title="Discover" />
       <SearchBar />
-      <TouchableOpacity onPress={() => sheetRef.current?.present()} style={styles.sortButton}>
-        <Icon name="arrow-right-arrow-left" size={18} color="#fdfdfd" style={{ transform: [{ rotate: '90deg' }] }} />
-        <Text style={styles.sortText}>{getSortLabel(order)}</Text>
-      </TouchableOpacity>
+
+      <View style={styles.sortContainer}>
+        <TouchableOpacity onPress={() => orderSheet.current?.present()} style={styles.sortButton}>
+          <Icon name="arrow-right-arrow-left" size={14} color="#000000" style={{ transform: [{ rotate: '90deg' }] }} />
+          <Text style={styles.sortText}>{order ? orderLabel(order) : 'Order By'}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => genreSheet.current?.present()} style={styles.sortButton}>
+          <Icon name="arrow-right-arrow-left" size={14} color="#000000" style={{ transform: [{ rotate: '90deg' }] }} />
+          <Text style={styles.sortText}>{genre ? genreLabel(genre) : 'Genre'}</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* flatlist for ordered games */}
       <FlatList
         data={sortedGames}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <DiscoverCard game={item} />}
       />
+      {/* flatlist for genres */}
+      <FlatList
+        data={genres}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <DiscoverCard game={item} />}
+      />
 
-      <Sheet ref={sheetRef} title="Order by">
+      {/* order sheet */}
+      <Sheet ref={orderSheet} title="Order by">
         <View>
           <RadioGroup options={DiscoverSortOptions} selectedOption={order} onChange={handleSelect} />
+        </View>
+      </Sheet>
+
+      {/* genre sheet */}
+      <Sheet ref={genreSheet} title="Order by">
+        <View>
+          <RadioGroup options={GenreOptions} selectedOption={genre} onChange={handleGenre} />
         </View>
       </Sheet>
     </View>
@@ -96,16 +133,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     paddingHorizontal: 10,
   },
+  sortContainer: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    alignItems: 'center',
+  },
   sortButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: '#ffffff',
+    marginEnd: 10,
+    borderRadius: 3
   },
   sortText: {
     marginRight: 5,
-    fontSize: 18,
-    color: '#e9e9e9',
-    fontWeight: '900',
+    fontSize: 16,
+    color: '#000000',
+    fontWeight: 'bold',
     marginLeft: 5
   },
   header: {

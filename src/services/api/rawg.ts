@@ -99,3 +99,17 @@ export const fetchPopularGames = async () => {
   });
   return response.data.results;
 };
+
+//discover - fetch genres
+export const fetchGenres = async (ordering: string, genre: string | null) => {
+  console.log(`Fetching games with order: ${ordering} and genre: ${genre}`); // Add this line for debugging
+  const response = await axios.get(`${BASE_URL}/games`, {
+      params: {
+          key: API_KEY,
+          ordering:'-metacritic', //based on rating, change to anything else
+          genres: genre,
+      },
+  });
+
+  return response.data.results;
+};

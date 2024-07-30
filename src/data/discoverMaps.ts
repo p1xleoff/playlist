@@ -1,0 +1,30 @@
+export const DiscoverSortOptions = [
+    { label: 'Popularity', value: 'popular' },
+    // { label: 'Relevance', value: 'relevance' },
+    { label: 'Upcoming', value: 'upcoming' },
+    { label: 'New', value: 'new' },
+    { label: 'Metacritic', value: '-metacritic' },
+    { label: 'Rating', value: '-rating' },
+    { label: 'Released', value: 'released' },
+    // { label: 'Added', value: '-added' },
+  ];
+
+  export const GenreOptions = [
+    { label: 'Action', value: 'action' },
+    { label: 'Adventure', value: 'adventure' },
+    { label: 'Indie', value: 'indie' },
+    { label: 'Strategy', value: 'strategy' },
+    { label: 'Shooter', value: 'shooter' },
+    { label: 'Casual', value: 'casual' },
+    { label: 'Simulation', value: 'simulation' },
+    { label: 'Puzzle', value: 'puzzle' },
+    { label: 'Arcade', value: 'arcade' },
+    { label: 'Platformer', value: 'platformer' },
+    { label: 'Racing', value: 'racing' },
+    { label: 'MMO', value: 'massively-multiplayer' },
+    { label: 'Sports', value: 'sports' },
+    { label: 'Board Games', value: 'board-games' },
+    { label: 'Educational', value: 'educational' },
+    { label: 'Family', value: 'family' },
+    { label: 'Card', value: 'card' },
+  ];

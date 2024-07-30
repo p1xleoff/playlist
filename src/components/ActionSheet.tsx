@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef, useImperativeHandle } from 'react';
-import { View, Button, StyleSheet, Text, Pressable, Dimensions } from 'react-native';
+import { View, Button, StyleSheet, Text, Pressable, Dimensions, ScrollView } from 'react-native';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -16,7 +16,7 @@ interface SheetComponentProps {
 
 const Sheet = forwardRef<SheetHandle, SheetComponentProps>(({ children, title, sizes }, ref) => {
   const sheet = useRef<TrueSheet>(null);
-
+  const scrollview = useRef<ScrollView>(null)
   useImperativeHandle(ref, () => ({
     present: async () => {
       await sheet.current?.present();
@@ -27,18 +27,20 @@ const Sheet = forwardRef<SheetHandle, SheetComponentProps>(({ children, title, s
   }));
 
   return (
-    <TrueSheet ref={sheet} sizes={["auto", "medium"]} cornerRadius={7}
-    backgroundColor="#111111"
+    <TrueSheet ref={sheet} sizes={["auto"]} cornerRadius={7}
+      backgroundColor="#111111"
     >
-      <View style={styles.sheetContainer}>
-        <View style={styles.header}>
-        <Text style={styles.title}>{title}</Text>
-        <Pressable onPress={() => sheet.current?.dismiss()}>
-        <Icon name='close-circle-outline' size={28} color="#f32929" />
-        </Pressable>
-        </View>
-        {children}
-      </View>
+        <View style={styles.sheetContainer}>
+      <ScrollView ref={scrollview} nestedScrollEnabled>
+          <View style={styles.header}>
+            <Text style={styles.title}>{title}</Text>
+            <Pressable onPress={() => sheet.current?.dismiss()}>
+              <Icon name='close-circle-outline' size={28} color="#f32929" />
+            </Pressable>
+          </View>
+          {children}
+        </ScrollView>
+        </View> 
     </TrueSheet>
   );
 });

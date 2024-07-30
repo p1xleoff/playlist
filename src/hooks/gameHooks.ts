@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames } from "../services/api/rawg";
+import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames, fetchGenres } from "../services/api/rawg";
 import { Additions, BaseGame, Franchise, Game, GameStore, Screenshots, SeriesGame, Store } from "../types/Game";
 
 export const useSearchGames = (query: string) => {
@@ -97,3 +97,14 @@ export const useNewGames = () => {
         refetchOnWindowFocus: true,
     });
 };
+
+//discover - genres hook
+export const useGenres = (ordering: string, genre: string | null) => {
+    return useQuery({
+        queryKey: ['fetchGenres', ordering, genre],
+        queryFn: () => fetchGenres(ordering, genre),
+        refetchOnWindowFocus: true,
+    });
+};
+
+

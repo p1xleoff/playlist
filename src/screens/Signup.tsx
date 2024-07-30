@@ -2,7 +2,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { signUp } from '../services/auth/firebase';
-import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import { Button } from '../components/Utils';
 
@@ -39,7 +39,7 @@ const Signup = () => {
                 <TextInput value={email} onChangeText={setEmail} placeholder='Email' style={styles.input} keyboardType="email-address" autoCapitalize="none" />
                 <TextInput value={password} onChangeText={setPassword} placeholder='Password' style={styles.input} secureTextEntry />
                 {error && <Text style={styles.errorText}>{error}</Text>}
-                <Button title={loading ? 'Signing up...' : 'Signup'} onPress={handleSignUp} style={styles.button} disabled={() => loading} />
+                <Button title={loading ? 'Signing up...' : 'Signup'} onPress={handleSignUp} style={styles.button} />
                 <Text style={styles.text}>
                     Already have an account?
                     <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}> Login</Text>

@@ -19,6 +19,8 @@ import Login from '../screens/Login';
 import Landing from '../screens/Landing';
 import Collection from '../screens/Collection';
 import Dummy from '../screens/Dummy';
+import Data from '../screens/Data';
+import Acknowledgements from '../screens/Acknowledgements';
 
 // Types
 import { Franchise, Game } from '../types/Game';
@@ -37,6 +39,8 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   Dummy: undefined;
+  Data: undefined;
+  Acknowledgements: undefined;
   GameDetails: { game: Game | Franchise };
 };
 
@@ -103,6 +107,8 @@ const Navigator: React.FC<NavigatorProps> = ({ user }) => {
               <Stack.Screen name="Lists" component={Lists} options={{ headerShown: false }} />
               <Stack.Screen name="Collection" component={Collection} options={{ headerShown: false }} />              
               <Stack.Screen name="Dummy" component={Dummy} options={{ headerShown: false }} />
+              <Stack.Screen name="Data" component={Data} options={{ headerShown: false }} />
+              <Stack.Screen name="Acknowledgements" component={Acknowledgements} options={{ headerShown: false }} />
             </>
           ) : (
             <>

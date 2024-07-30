@@ -25,6 +25,8 @@ type LogInProps = {
     password: string;
     // username: string;
 }
+
+//sign up user
 export const signUp = async ({ email, password, username }: SignUpProps): Promise<FirebaseAuthTypes.User | null> => {
     try {
         const userCredentials = await auth().createUserWithEmailAndPassword(email, password);
@@ -40,6 +42,8 @@ export const signUp = async ({ email, password, username }: SignUpProps): Promis
     }
 };
 
+
+//login user
 export const logIn = async ({ email, password }: LogInProps): Promise<FirebaseAuthTypes.User | null> => {
     try {
         const userCredentials = await auth().signInWithEmailAndPassword(email, password);
@@ -51,6 +55,7 @@ export const logIn = async ({ email, password }: LogInProps): Promise<FirebaseAu
     }
 };
 
+//log out the current user
 export const signOut = async (): Promise<void> => {
     try {
         await auth().signOut();
@@ -61,6 +66,7 @@ export const signOut = async (): Promise<void> => {
     }
 };
 
+//get info about current user from firebase
 export const getCurrentUser = (): { email: string; username: string } | null => {
     const user = auth().currentUser;
     if (user) {
@@ -72,6 +78,7 @@ export const getCurrentUser = (): { email: string; username: string } | null => 
     return null;
 };
 
+//create the default lists when the user signs up (backlog, playlist, wishlist, completed)
 const createDefaultLists = async (userId: string | undefined) => {
     if (!userId) {
         throw new Error('User ID is undefined');
@@ -91,6 +98,7 @@ const createDefaultLists = async (userId: string | undefined) => {
     await batch.commit();
 };
 
+//add a game to a list in firestore
 export const addGameToList = async (userId: string, listName: string, game: GameProps) => {
     try {
         const listsRef = firestore().collection('users').doc(userId).collection('lists');
@@ -122,6 +130,7 @@ export const addGameToList = async (userId: string, listName: string, game: Game
     }
 };
 
+//delete a game from a list in firestore
 export const deleteGameFromList = async (userId: string, listName: string, gameId: number) => {
     try {
         const listRef = firestore().collection('users').doc(userId).collection('lists');
@@ -149,8 +158,7 @@ export const deleteGameFromList = async (userId: string, listName: string, gameI
     }
 };
 
-
-
+//move games between lists
 export const moveGameToList = async (userId: string, sourceList: string, targetList: string, game: ReGame) => {
     try {
         const listRef = firestore().collection('users').doc(userId).collection('lists');
@@ -179,6 +187,7 @@ export const moveGameToList = async (userId: string, sourceList: string, targetL
     }
 };
 
+//get all lists and games from firestore
 export const getUserLists = (userId: string, callback: (lists: any[]) => void) => {
     const listsRef = firestore().collection('users').doc(userId).collection('lists');
 
@@ -203,6 +212,7 @@ export const getUserLists = (userId: string, callback: (lists: any[]) => void) =
     });
 };
 
+//gameDetails - show the list name if the game exists in any list
 export const getGameList = async (userId: string, gameId: number): Promise<string | null> => {
     try {
         const listName = firestore().collection('users').doc(userId).collection('lists');
@@ -218,5 +228,26 @@ export const getGameList = async (userId: string, gameId: number): Promise<strin
     } catch (error) {
         console.error('Error cheking game status', error);
         throw new Error('Error fetching game list status. Please try again');
+    }
+};
+
+//delete only the games from the collection. 
+export const deleteCollectionGames = async (userId: string) => {
+    try {
+        const listsRef = firestore().collection('users').doc(userId).collection('lists');
+        const snapshot = await listsRef.get();
+
+        const batch = firestore().batch();
+
+        snapshot.docs.forEach(doc => {
+            const listRef = listsRef.doc(doc.id);
+            batch.update(listRef, { games: [] }); // Set the games array to empty
+        });
+
+        await batch.commit();
+        console.log('Deleted all games from user collection');
+    } catch (error) {
+        console.error('Error deleting all games from collection', error);
+        throw new Error("Failed to delete all games from collection");
     }
 };

@@ -17,11 +17,11 @@ const Card = ({ children, style }: CardProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 11,
+    padding: 15,
     marginHorizontal: 10,
     marginVertical: 3,
     borderRadius: 3,
-    backgroundColor: '#fff',
+    backgroundColor: '#111111',
     elevation: 5
   }
 })

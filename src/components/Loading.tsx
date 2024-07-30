@@ -7,7 +7,7 @@ interface LoadingProps {
 
 export const Loading = ({ style }: LoadingProps) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.loader, style]}>
       <ActivityIndicator size='large' color='#ff5e00' />
     </View>
   )
@@ -15,17 +15,22 @@ export const Loading = ({ style }: LoadingProps) => {
 
 export const SmallLoader = () => {
   return (
-    <View style={styles.container}>
+    <View style={styles.smolLoader}>
       <ActivityIndicator size='small' color='#c300ff' />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  loader: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black'
+    backgroundColor: '#000000'
+  },
+  smolLoader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })

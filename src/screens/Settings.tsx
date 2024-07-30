@@ -41,7 +41,7 @@ const Settings = ({ navigation }: SettingsProps) => {
   const { totalGames, loading } = useGameCount();
   const user = auth().currentUser;
   const userJoinDate = user?.metadata.creationTime;
-  
+
   //actions sheet
   const sheetRef = useRef<SheetHandle>(null);
   const themeActions = () => {
@@ -88,70 +88,99 @@ const Settings = ({ navigation }: SettingsProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View>
-          <View>
-            {/* profile card */}
-            <Card>
-              {/* profile info */}
-              <View style={styles.cardBox}>
-                <Image
-                  source={require('../assets/images/pxOwl.png')}
-                  style={styles.avatar}
-                />
-                <View>
-                  <Text style={styles.userName}>p1xLe</Text>
-                  <Text style={styles.aboutText}>the master of screwups</Text>
-                </View>
+        <View style={{ marginTop: 15 }}>
+          {/* profile card */}
+          <Card>
+            {/* profile info */}
+            <View style={styles.cardBox}>
+              <Image
+                source={require('../assets/images/pxOwl.png')}
+                style={styles.avatar}
+              />
+              <View>
+                <Text style={styles.userName}>p1xLe</Text>
+                <Text style={styles.aboutText}>the master of screwups</Text>
               </View>
+            </View>
 
-              <Separator />
+            <Separator style={{ backgroundColor: '#5a5a5a' }} />
 
-              {/* profile badges */}
-              <View style={styles.cardBox}>
-                <Badge>
-                  <Text style={styles.text}>{userJoinDate ? formatDate(userJoinDate) : (<SmallLoader />)}</Text>
-                </Badge>
-                <Badge>
-                  <TouchableOpacity onPress={() => navigation.navigate('Collection')}>
-                    <Text style={styles.text}>
-                      {totalGames ? `${totalGames} Games` : (<SmallLoader />)}
-                    </Text>
-                  </TouchableOpacity>
-                </Badge>
-              </View>
-            </Card>
+            {/* profile badges */}
+            <View style={styles.cardBox}>
+              <Badge>
+                <Text style={styles.text}>{userJoinDate ? formatDate(userJoinDate) : (<SmallLoader />)}</Text>
+              </Badge>
+              <Badge>
+                <TouchableOpacity onPress={() => navigation.navigate('Collection')}>
+                  <Text style={styles.text}>
+                    {totalGames ? `${totalGames} Games` : (<SmallLoader /> ) }
+                  </Text>
+                </TouchableOpacity>
+              </Badge>
+            </View>
+          </Card>
 
-            {/* data */}
-            <Card>
-              <SettingsLink
-                onPress={logging} iconName="chart-donut" title="Data and Storage" />
-            </Card>
 
-            {/* connections */}
-            <Card>
-              <SettingsLink onPress={() => navigation.navigate('Account')} iconName="puzzle" title="Connections" />
-            </Card>
+          <View style={{ marginVertical: 15 }}>
+            <View style={styles.category}>
+              {/* account */}
+              {/* <Text style={styles.categoryText}>Account</Text> */}
+              <Card>
+                <SettingsLink
+                  onPress={() => navigation.navigate('Account')} iconName="account" title="Account" />
+              </Card>
+              <Card>
+                <SettingsLink
+                  onPress={() => navigation.navigate('Collection')} iconName="hexagon-multiple" title="Game Collection" />
+              </Card>
+            </View>
 
-            {/* theme */}
-            <Card>
-              <SettingsLink onPress={themeActions} iconName="palette" title="Theme" />
-            </Card>
 
-            {/* notifications */}
-            <Card>
-              <SettingsLink onPress={handleNotifPress} iconName="bell" title="Notifications" />
-            </Card>
+            <View style={styles.category}>
+              {/* data */}
+              {/* <Text style={styles.categoryText}>Data and Storage</Text> */}
+              <Card>
+                <SettingsLink
+                  onPress={() => navigation.navigate('Data')} iconName="chart-donut" title="Data and Storage" />
+              </Card>
+            </View>
+
+            <View style={styles.category}>
+              {/* <Text style={styles.categoryText}>Preferences</Text> */}
+              {/* theme */}
+              <Card>
+                <SettingsLink onPress={themeActions} iconName="palette" title="Theme" />
+              </Card>
+
+              {/* notifications */}
+              <Card>
+                <SettingsLink onPress={handleNotifPress} iconName="bell" title="Notifications" />
+              </Card>
+            </View>
+
+            <View style={styles.category}>
+              {/* <Text style={styles.categoryText}>Information</Text> */}
+              <Card>
+                <SettingsLink onPress={() => navigation.navigate('Acknowledgements')} iconName="information" title="Acknowledgements" />
+              </Card>
+            </View>
 
             {/* about */}
             <Card>
-              <SettingsLink onPress={() => navigation.navigate('Dummy')} iconName="information" title="About" />
+              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2, justifyContent: 'space-between' }}>
+                <View >
+                <Text style={{fontSize: 18, fontWeight: '900', color: 'white'}}>playl1st</Text>
+                <Text style={{color: 'white', fontWeight: '600'}}>Version 0.1</Text>
+                </View>
+                <Icon name="cheese" size={IconSize.m} color="#ffffff" />
+              </View>
             </Card>
 
             {/* logOut */}
             <Card>
               <Pressable onPress={handleSignOut}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2 }}>
-                  <Icon name="location-exit" size={IconSize.m} color="#000000" />
+                  <Icon name="location-exit" size={IconSize.m} color="#ff0000" />
                   <Text style={[styles.aboutText, styles.logOutText]}>Log Out</Text>
                 </View>
               </Pressable>
@@ -179,8 +208,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   text: {
+    color: '#000000',
+    fontWeight: '900',
+  },
+  category: {
+    // marginVertical: 7
+  },
+  categoryText: {
     color: '#ffffff',
-    fontWeight: '600',
+    fontWeight: '900',
+    fontSize: 16,
+    marginLeft: 10,
+    marginBottom: 3
   },
   cardBox: {
     flex: 1,
@@ -196,12 +235,12 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 22,
-    color: 'black',
+    color: '#ffffff',
     fontWeight: 'bold',
   },
   aboutText: {
     fontSize: 16,
-    color: 'black',
+    color: '#d6d6d6',
     fontWeight: '900',
   },
   logOutText: {

@@ -9,6 +9,7 @@ import { listColors, listSort } from '../data/ListMaps';
 import SearchBar from '../components/SearchBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { getRelativeTime } from '../utils/dateTime';
+import { FloatBack } from '../components/Utils';
 
 type AllGamesProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;
 
@@ -61,6 +62,7 @@ const AllGames = ({ navigation }: AllGamesProps) => {
 
     return (
         <View style={styles.container}>
+            <FloatBack onPress={() => navigation.goBack()}/>
             <View style={{ paddingHorizontal: 10 }}>
                 <SearchBar />
             </View>

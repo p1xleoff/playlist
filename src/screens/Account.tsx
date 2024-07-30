@@ -50,7 +50,7 @@ const Account: React.FC = () => {
   }, []);
   
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.avatarContainer}>
         <Image
           source={require('../assets/images/pxOwl.png')}
@@ -69,10 +69,6 @@ const Account: React.FC = () => {
           <View style={styles.formContainer}>
             <TxtInput label="Name" name="name" iconName='account' value={userInfo?.displayName || ''} />
             <TxtInput label="Email" name="email" keyboardType="email-address" iconName='email' editable={false} value={userInfo?.email || 'qq'} />
-            <Button
-              onPress={() => handleSubmit()}
-              title="Submit"
-            />
           </View>
         )}
       </Formik>
@@ -81,6 +77,10 @@ const Account: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black'
+  },
   avatarContainer: {
     alignItems: 'center',
     marginTop : 20,

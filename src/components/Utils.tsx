@@ -54,7 +54,7 @@ const SettingsLink = ({ children, style, iconName, title, onPress }: LinkProps) 
   return (
     <Pressable onPress={onPress} style={[styles.link, style]}>
       <View style={styles.linkGroup}>
-        <Icon name={iconName} size={IconSize.m} color="#000000" />
+        <Icon name={iconName} size={IconSize.m} color="#f3f3f3" />
         <Text style={styles.linkText}>{title}</Text>
       </View>
       {/* <Icon name='chevron-right' size={IconSize.m} color="#000000" /> */}
@@ -109,7 +109,7 @@ const TxtInput: React.FC<InputProps> = ({ label, name, iconName, ...props }) => 
         <Text style={styles.label}>{label}</Text>
       </View>
 
-      <TextInput style={styles.input} onChangeText={field.onChange(name)} onBlur={field.onBlur(name)} value={field.value} {...props} cursorColor='#000000' />
+      <TextInput style={styles.input} onChangeText={field.onChange(name)} onBlur={field.onBlur(name)} value={field.value} {...props} cursorColor='#ffffff' />
       {meta.touched && meta.error && (
         <Text style={styles.inputError}>{meta.error}</Text>
       )}
@@ -150,6 +150,20 @@ const Reload = ({ onPress }: ReloadProps) => {
 }
 
 
+//FLOATING BACK BUTTON
+type FloatBackProps = {
+  onPress: () => void;
+}
+const FloatBack = ({ onPress }: FloatBackProps) => {
+  return (
+    <View style={styles.floatbutton}>
+    <TouchableOpacity onPress={onPress}>
+        <Icon name="chevron-left" color="#000" size={32} />
+    </TouchableOpacity>
+</View>
+  )
+}
+
 const styles = StyleSheet.create({
   //separator
   separator: {
@@ -161,8 +175,8 @@ const styles = StyleSheet.create({
 
   //badge
   badge: {
-    backgroundColor: '#000000',
-    padding: 10,
+    backgroundColor: '#f0f0f0',
+    padding: 7,
     marginRight: 10,
     borderRadius: 3,
     elevation: 3,
@@ -178,7 +192,7 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-    color: 'black',
+    color: '#f7f7f7',
     fontWeight: '900',
     marginLeft: 15,
   },
@@ -222,16 +236,16 @@ const styles = StyleSheet.create({
 
   },
   label: {
-    color: '#303030',
+    color: '#d8d8d8',
     marginBottom: -10,
     marginLeft: 5
   },
   input: {
-    borderBottomWidth: 2,
+    // borderBottomWidth: 2,
     borderRadius: 5,
-    borderColor: '#000000',
+    // borderColor: '#ffffff',
     marginBottom: 4,
-    color: 'black',
+    color: '#ffffff',
     fontWeight: 'bold',
     fontSize: 18,
     paddingBottom: -2,
@@ -258,7 +272,16 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: '900',
     letterSpacing: 1.5,
-  }
+  },
+
+  //float back
+  floatbutton: {
+    backgroundColor: '#fff',
+    padding: 5,
+    alignSelf: 'flex-start',
+    borderRadius: 50,
+    margin: 10
+},
 });
 
-export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, Reload };
+export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, Reload, FloatBack };

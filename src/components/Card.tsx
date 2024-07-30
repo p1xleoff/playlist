@@ -18,9 +18,9 @@ const Card = ({ children, style }: CardProps) => {
 const styles = StyleSheet.create({
   card: {
     padding: 11,
-    marginHorizontal: 15,
+    marginHorizontal: 10,
     marginVertical: 3,
-    borderRadius: 10,
+    borderRadius: 3,
     backgroundColor: '#fff',
     elevation: 5
   }

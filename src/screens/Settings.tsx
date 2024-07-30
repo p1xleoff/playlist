@@ -86,9 +86,9 @@ const Settings = ({ navigation }: SettingsProps) => {
     setThemeSelect(value);
   }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.container}>
+        <View>
           <View>
             {/* profile card */}
             <Card>
@@ -175,7 +175,8 @@ const Settings = ({ navigation }: SettingsProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 10,
+    paddingVertical: 10,
+    backgroundColor: 'black',
   },
   text: {
     color: '#ffffff',

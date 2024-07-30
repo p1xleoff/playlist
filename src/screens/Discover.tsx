@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
 const Discover = () => {
-  const [order, setOrder] = useState('relevance');
+  const [order, setOrder] = useState('popular');
   const { data: games, isLoading, error } = useDiscoverGames(order);
   const { data: popularGames } = usePopularGames();
   const { data: upcomingGames } = useUpcomingGames();
@@ -22,8 +22,8 @@ const Discover = () => {
   const sheetRef = useRef<SheetHandle>(null);
 
   const DiscoverSortOptions = [
-    { label: 'Relevance', value: 'relevance' },
     { label: 'Popularity', value: 'popular' },
+    // { label: 'Relevance', value: 'relevance' },
     { label: 'Upcoming', value: 'upcoming' },
     { label: 'New', value: 'new' },
     { label: 'Metacritic', value: '-metacritic' },
@@ -72,7 +72,7 @@ const Discover = () => {
       <Header title="Discover" />
       <SearchBar />
       <TouchableOpacity onPress={() => sheetRef.current?.present()} style={styles.sortButton}>
-        <Icon name="arrow-right-arrow-left" size={14} color="#fdfdfd" style={{ transform: [{ rotate: '90deg' }] }} />
+        <Icon name="arrow-right-arrow-left" size={18} color="#fdfdfd" style={{ transform: [{ rotate: '90deg' }] }} />
         <Text style={styles.sortText}>{getSortLabel(order)}</Text>
       </TouchableOpacity>
       <FlatList
@@ -100,14 +100,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 5,
-},
-sortText: {
+  },
+  sortText: {
     marginRight: 5,
     fontSize: 18,
     color: '#e9e9e9',
     fontWeight: '900',
     marginLeft: 5
-},
+  },
   header: {
     color: 'white',
     fontSize: 22,

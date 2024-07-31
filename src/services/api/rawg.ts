@@ -2,8 +2,8 @@ import axios from "axios";
 
 import { Game, Screenshots, GameStore } from "../../types/Game";
 import { getDateRanges } from "../../utils/dateTime";
-//
-const API_KEY = '073e39c421ce4638ba42fea55efba786';
+//073e39c421ce4638ba42fea55efba786
+const API_KEY = 'asra';
 const BASE_URL = 'https://api.rawg.io/api';
 
 export const fetchGames = async () => {

@@ -134,22 +134,6 @@ const Button = ({ style, title, onPress }: ButtonProps) => {
 };
 
 
-////////////RELOAD BUTTON
-type ReloadProps = {
-  onPress: () => void;
-}
-const Reload = ({ onPress }: ReloadProps) => {
-  const [reload, setReload] = useState(false);
-  return (
-    <View>
-      <TouchableOpacity onPress={onPress}>
-        <Text style={styles.radioText}>Reload</Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-
 //FLOATING BACK BUTTON
 type FloatBackProps = {
   onPress: () => void;
@@ -214,6 +198,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: 'bold'
   },
+  
   radioCircle: {
     height: 22,
     width: 22,
@@ -284,4 +269,4 @@ const styles = StyleSheet.create({
 },
 });
 
-export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, Reload, FloatBack };
+export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, FloatBack };

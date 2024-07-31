@@ -11,18 +11,19 @@ import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { RadioGroup } from '../components/Utils';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { DiscoverSortOptions, GenreOptions } from '../data/discoverMaps';
+import Reload from '../components/Reload';
 
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
-const Discover = () => {
+const Discover = ({navigation}: DiscoverProps) => {
   const [order, setOrder] = useState('popular');
   const [genre, setGenre] = useState('');
 
-  const { data: games, isLoading, error } = useDiscoverGames(order);
-  const { data: popularGames, isLoading: popularLoading, error: popularError } = usePopularGames();
-  const { data: upcomingGames, isLoading: upcomingLoading, error: upconmingError } = useUpcomingGames();
-  const { data: newGames, isLoading: newLoading, error: newError } = useNewGames();
-  const { data: genres, isLoading: genreLoading, error: genreError } = useGenres(order, genre);
+  const { data: games, isLoading, error, refetch: refetchGames } = useDiscoverGames(order);
+  const { data: popularGames, isLoading: popularLoading, error: popularError, refetch: refetchPopularGames } = usePopularGames();
+  const { data: upcomingGames, isLoading: upcomingLoading, error: upconmingError, refetch: refetchUpcomingGames  } = useUpcomingGames();
+  const { data: newGames, isLoading: newLoading, error: newError, refetch: refetchNewGames } = useNewGames();
+  const { data: genres, isLoading: genreLoading, error: genreError, refetch: refetchGenres } = useGenres(order, genre);
 
   const orderSheet = useRef<SheetHandle>(null);
   const genreSheet = useRef<SheetHandle>(null);
@@ -64,10 +65,14 @@ const Discover = () => {
       return 0;
     });
   }
-  
+  const retryFetch = () => {
+    refetchGames();
+  };
   //render loading and error checks
   if (isLoading || popularLoading || upcomingLoading || newLoading || genreLoading) return <Loading />;
-  if (error || popularError || upconmingError || newError || genreError) return <Text>Something went wrong</Text>;
+  if (error || popularError || upconmingError || newError || genreError) return (
+    <Reload onPress={retryFetch} />
+  );
 
   const orderLabel = (value: string) => {
     const option = DiscoverSortOptions.find(option => option.value === value);

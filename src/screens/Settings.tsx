@@ -113,7 +113,7 @@ const Settings = ({ navigation }: SettingsProps) => {
               <Badge>
                 <TouchableOpacity onPress={() => navigation.navigate('Collection')}>
                   <Text style={styles.text}>
-                    {totalGames ? `${totalGames} Games` : (<SmallLoader /> ) }
+                    {totalGames ? `${totalGames} Games` : (<SmallLoader />)}
                   </Text>
                 </TouchableOpacity>
               </Badge>
@@ -167,13 +167,15 @@ const Settings = ({ navigation }: SettingsProps) => {
 
             {/* about */}
             <Card>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2, justifyContent: 'space-between' }}>
-                <View >
-                <Text style={{fontSize: 18, fontWeight: '900', color: 'white'}}>playl1st</Text>
-                <Text style={{color: 'white', fontWeight: '600'}}>Version 0.1</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Dummy')}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2, justifyContent: 'space-between' }}>
+                  <View>
+                    <Text style={{ fontSize: 18, fontWeight: '900', color: 'white' }}>playl1st</Text>
+                    <Text style={{ color: 'white', fontWeight: '600' }}>Version 0.1</Text>
+                  </View>
+                  <Icon name="cheese" size={IconSize.m} color="#ffffff" />
                 </View>
-                <Icon name="cheese" size={IconSize.m} color="#ffffff" />
-              </View>
+              </TouchableOpacity>
             </Card>
 
             {/* logOut */}

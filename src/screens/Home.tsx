@@ -50,31 +50,41 @@ const Home = ({ navigation }: HomeProps) => {
     const indexA = listOrder.indexOf(a);
     const indexB = listOrder.indexOf(b);
     return indexA - indexB;
-  })
+  });
+
+  // Check if there are no games in any list
+  const noGamesInAnyList = sortedListKeys.every((listName) => games[listName].length === 0);
 
   return (
     <View style={styles.container}>
       <Header title='playlist' />
       <ScrollView showsVerticalScrollIndicator={false}>
         <SearchBar />
-        <View style={{ marginVertical: 15 }}>
-          {sortedListKeys.map((listName) => (
-            <View key={listName} style={styles.listSection}>
-              <Text style={styles.listTitle}>{dashList[listName]}</Text>
-              <Carousel games={games[listName]} />
-            </View>
-          ))}
-        </View>
+        {noGamesInAnyList ? (
+          <View style={styles.noGamesContainer}>
+            <Text style={styles.noGamesText}>No games in your collection yet.</Text>
+            <Text style={styles.noGamesText}>Search for games or go to Discover to add some games to your collection.</Text>
+          </View>
+        ) : (
+          <View style={{ marginVertical: 15 }}>
+            {sortedListKeys.map((listName) => (
+              games[listName].length > 0 && (
+                <View key={listName} style={styles.listSection}>
+                  <Text style={styles.listTitle}>{dashList[listName]}</Text>
+                  <Carousel games={games[listName]} />
+                </View>
+              )
+            ))}
+          </View>
+        )}
       </ScrollView>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#000000',
   },
@@ -90,7 +100,19 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'gold',
     padding: 10,
-  }
+  },
+  noGamesContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  noGamesText: {
+    color: '#d4d4d4',
+    fontSize: 18,
+    textAlign: 'center',
+    fontWeight: '600'
+  },
 });
 
 export default Home;

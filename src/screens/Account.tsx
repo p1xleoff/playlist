@@ -1,77 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { TxtInput, Button } from '../components/Utils';
-
+import { View, Text, StyleSheet } from 'react-native';
+import auth from '@react-native-firebase/auth'
+import { formatDate } from '../data/Date';
+import { SmallLoader } from '../components/Loading';
+import { useGameCount, useListGameCounts } from '../hooks/listHooks';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { listColors, listIcons } from '../data/ListMaps';
 
-import { RootStackParamList } from '../routes/Navigator';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+const Account = () => {
+  const user = auth().currentUser;
+  const userJoinDate = user?.metadata.creationTime;
+  const userLastSignIn = user?.metadata.lastSignInTime;
+  const { totalGames, loading } = useGameCount();
+  const { listGameCounts, loading: listCountLoading } = useListGameCounts();
 
-type AccountProps = NativeStackNavigationProp<RootStackParamList, 'Account'>;
+  const backlogCount = listGameCounts?.['backlog'] || 0;
+  const playlistCount = listGameCounts?.['playlist'] || 0;
+  const wishlistCount = listGameCounts?.['wishlist'] || 0;
+  const completedCount = listGameCounts?.['completed'] || 0;
 
-interface FormValues {
-  name: string;
-  email: string;
-}
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
-});
-
-const Account: React.FC = () => {
-  const initialValues: FormValues = { name: '', email: '' };
-  const navigation = useNavigation<AccountProps>();
-  const [userInfo, setUserInfo] = useState<FirebaseAuthTypes.User | null>(null);
-
-  useEffect(() => {
-      // Fetch user info when component mounts
-      const fetchUserInfo = async () => {
-          try {
-              const currentUser = await auth().currentUser;
-              if (currentUser) {
-                  setUserInfo(currentUser);
-              }
-          } catch (error) {
-              console.error('Error fetching user info:', error);
-              // Handle error (e.g., display error message to user)
-          }
-      };
-
-      fetchUserInfo();
-
-      return () => {
-          // Cleanup function
-      };
-  }, []);
-  
   return (
     <View style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <Image
-          source={require('../assets/images/pxOwl.png')}
-          style={styles.avatar}
-        />
-      </View>
-
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        {({ handleSubmit }) => (
-          <View style={styles.formContainer}>
-            <TxtInput label="Name" name="name" iconName='account' value={userInfo?.displayName || ''} />
-            <TxtInput label="Email" name="email" keyboardType="email-address" iconName='email' editable={false} value={userInfo?.email || 'qq'} />
+      {user ? (
+        <>
+          <View style={styles.card}>
+            <Text style={styles.key}>Username</Text>
+            <Text style={styles.value}>{user.displayName}</Text>
           </View>
-        )}
-      </Formik>
+
+          <View style={styles.card}>
+            <Text style={styles.key}>Email</Text>
+            <Text style={styles.value}>{user.email}</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.key}>Joined</Text>
+            <Text style={styles.value}>{userJoinDate ? formatDate(userJoinDate) : (<SmallLoader />)}</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.key}>Last Signed in</Text>
+            <Text style={styles.value}>{userLastSignIn ? formatDate(userLastSignIn) : (<SmallLoader />)}</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.key}>Collection</Text>
+            <Text style={styles.value}>
+              {totalGames ? `${totalGames} Games` : loading ? (<SmallLoader />) : '0 Games'}
+            </Text>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.key}>Games in Lists</Text>
+
+            <View style={styles.listInfo}>
+              <View style={styles.badge}>
+                <Text style={styles.count}>{backlogCount}</Text>
+                <View style={styles.strip}>
+                  <Icon name={listIcons.backlog} size={22} color={listColors.backlog} />
+                  <Text style={styles.listName}> Backlogs</Text>
+                </View>
+              </View>
+              <View style={styles.badge}>
+                <Text style={styles.count}>{playlistCount}</Text>
+                <View style={styles.strip}>
+                  <Icon name={listIcons.playlist} size={22} color={listColors.playlist} />
+                  <Text style={styles.listName}> Playing</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.listInfo}>
+              <View style={styles.badge}>
+                <Text style={styles.count}>{wishlistCount}</Text>
+                <View style={styles.strip}>
+                  <Icon name={listIcons.wishlist} size={22} color={listColors.wishlist} />
+                  <Text style={styles.listName}> WIshlisted</Text>
+                </View>
+              </View>
+              <View style={styles.badge}>
+                <Text style={styles.count}>{completedCount}</Text>
+                <View style={styles.strip}>
+                  <Icon name={listIcons.completed} size={22} color={listColors.completed} />
+                  <Text style={styles.listName}> Completed</Text>
+                </View>
+              </View>
+            </View>
+
+          </View>
+
+        </>
+      ) : (
+        <Text style={styles.error}>User not logged in</Text>
+      )}
     </View>
   );
 };
@@ -79,20 +100,57 @@ const Account: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black'
+    backgroundColor: '#000000',
+    padding: 10,
   },
-  avatarContainer: {
+  card: {
+    backgroundColor: '#111',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 3,
+    marginBottom: 5
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: '900',
+    marginTop: 10,
+  },
+  key: {
+    fontSize: 16,
+    color: '#a7a7a7',
+  },
+  value: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  error: {
+    fontSize: 16,
+    color: 'red',
+  },
+  listInfo: {
+    flexDirection: 'row',
+    marginVertical: 10
+  },
+  badge: {
     alignItems: 'center',
-    marginTop : 20,
+    width: '45%',
+    marginHorizontal: 10,
   },
-  avatar: {
-    width: 150,
-    height: 150,
-    borderRadius: 100,
-    marginRight: 15,
-  },  
-  formContainer: {
-    padding: 16,
+  strip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 3,
+  },
+  listName: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#c5c5c5',
+  },
+  count: {
+    fontSize: 28,
+    color: '#fff',
+    fontWeight: '900'
   },
 });
 

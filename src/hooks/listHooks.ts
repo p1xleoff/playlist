@@ -25,3 +25,30 @@ export const useGameCount = () => {
     
     return { totalGames, loading };
 };
+
+export const useListGameCounts = () => {
+    const [listGameCounts, setListGameCounts] = useState<{ [key: string]: number } | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const userId = auth().currentUser?.uid;
+
+        if (userId) {
+            const unsubscribe = getUserLists(userId, (listData) => {
+                const counts = listData.reduce((acc, list) => {
+                    acc[list.id] = list.gameCount; // Store the count with the list ID as the key
+                    return acc;
+                }, {} as { [key: string]: number });
+
+                setListGameCounts(counts);
+                setLoading(false);
+            });
+
+            return () => unsubscribe();
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
+    return { listGameCounts, loading };
+};

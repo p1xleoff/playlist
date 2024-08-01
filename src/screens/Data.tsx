@@ -41,14 +41,8 @@ const Data = ({ navigation }: DataProps) => {
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
-                <View style={styles.floatbutton}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                        <Icon name="chevron-left" color="#000" size={32} />
-                    </TouchableOpacity>
-                </View>
                 <View style={styles.card}>
                     <Text style={styles.title}>Delete Games Collection</Text>
-                    <Text style={styles.text}>Wait. You are entering danger zone.</Text>
                     <Text style={styles.text}>This action will permanantly delete all your games from the app and clear the online cloud storage. There will be no way to restore it.</Text>
                     <Text style={styles.text}>All the games you added will be lost forever.</Text>
                     <TouchableOpacity style={styles.links} onPress={handleDeleteAllGames}>
@@ -80,13 +74,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#858585',
         marginBottom: 15
-    },
-    floatbutton: {
-        backgroundColor: '#fff',
-        padding: 5,
-        alignSelf: 'flex-start',
-        borderRadius: 50,
-        marginBottom: 10
     },
     card: {
         backgroundColor: '#101010',

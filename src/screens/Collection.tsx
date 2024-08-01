@@ -62,7 +62,7 @@ const AllGames = ({ navigation }: AllGamesProps) => {
 
     return (
         <View style={styles.container}>
-            <FloatBack onPress={() => navigation.goBack()}/>
+            {/* <FloatBack onPress={() => navigation.goBack()}/> */}
             <View style={{ paddingHorizontal: 10 }}>
                 <SearchBar />
             </View>

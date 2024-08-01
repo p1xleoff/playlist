@@ -65,9 +65,12 @@ const Discover = ({navigation}: DiscoverProps) => {
       return 0;
     });
   }
+
+  //retry the games api request
   const retryFetch = () => {
     refetchGames();
   };
+
   //render loading and error checks
   if (isLoading || popularLoading || upcomingLoading || newLoading || genreLoading) return <Loading />;
   if (error || popularError || upconmingError || newError || genreError) return (

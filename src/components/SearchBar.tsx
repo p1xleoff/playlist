@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, StyleSheet, Pressable, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
 
 interface SearchBarProps {
@@ -14,20 +14,16 @@ interface SearchBarProps {
   autoFocus?: boolean;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  searchIcon = "magnify",
-  clearIcon = "close",
-  exitIcon = "arrow-left",
-  onExitPress,
-  value,
-  onChangeText,
-  autoFocus
-}: SearchBarProps) => {
+const SearchBar: React.FC<SearchBarProps> = ({ searchIcon = "magnify", clearIcon = "close", exitIcon = "arrow-left", onExitPress, value, onChangeText, autoFocus }: SearchBarProps) => {
 
   const [inputValue, setInputValue] = useState<string>(value ?? '');
   const inputRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute();
+
+  const tabScreens = ['Home', 'Lists', 'Discover'];
 
   const handleChangeText = (text: string) => {
     setInputValue(text);
@@ -43,8 +39,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     handleClear();
     Keyboard.dismiss();
     inputRef.current?.blur();
-    // onExitPress && onExitPress();
-    navigation.goBack();
+    onExitPress && onExitPress();
+    if (tabScreens.includes(route.name)) {
+      navigation.navigate('Search');
+    } else {
+      navigation.goBack();
+    }
   }
 
   const handleFocus = () => {
@@ -65,7 +65,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         style={styles.input}
         value={inputValue}
         onFocus={handleFocus}
-        // onBlur={handleBlur}
+        onBlur={handleBlur}
         onChangeText={handleChangeText}
         placeholder="Search..."
         placeholderTextColor="#acacac"

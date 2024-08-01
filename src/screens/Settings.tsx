@@ -27,7 +27,7 @@ import auth from '@react-native-firebase/auth';
 
 //components
 import Card from '../components/Card';
-import { Separator, Badge, SettingsLink, RadioGroup } from '../components/Utils';
+import { Separator, Badge, SettingsLink, RadioGroup, FloatBack } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { useGameCount } from '../hooks/listHooks';
 import { formatDate } from '../data/Date';
@@ -87,23 +87,23 @@ const Settings = ({ navigation }: SettingsProps) => {
   }
   return (
     <SafeAreaView style={styles.container}>
+      {/* <FloatBack onPress={() => navigation.goBack()}/> */}
       <ScrollView>
-        <View style={{ marginTop: 15 }}>
+        <View>
           {/* profile card */}
           <Card>
             {/* profile info */}
             <View style={styles.cardBox}>
-              <Image
+              {/* <Image
                 source={require('../assets/images/pxOwl.png')}
                 style={styles.avatar}
-              />
-              <View>
-                <Text style={styles.userName}>p1xLe</Text>
-                <Text style={styles.aboutText}>the master of screwups</Text>
-              </View>
+              /> */}
+              {/* <View> */}
+                <Text style={styles.userName}>{user?.displayName}</Text>
+              {/* </View> */}
             </View>
 
-            <Separator style={{ backgroundColor: '#5a5a5a' }} />
+            {/* <Separator style={{ backgroundColor: '#5a5a5a' }} /> */}
 
             {/* profile badges */}
             <View style={styles.cardBox}>
@@ -182,7 +182,7 @@ const Settings = ({ navigation }: SettingsProps) => {
             <Card>
               <Pressable onPress={handleSignOut}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2 }}>
-                  <Icon name="location-exit" size={IconSize.m} color="#ff0000" />
+                  <Icon name="logout-variant" size={IconSize.m} color="#ff0000" />
                   <Text style={[styles.aboutText, styles.logOutText]}>Log Out</Text>
                 </View>
               </Pressable>
@@ -206,8 +206,8 @@ const Settings = ({ navigation }: SettingsProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 10,
     backgroundColor: 'black',
+    paddingVertical: 10
   },
   text: {
     color: '#000000',
@@ -236,9 +236,10 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   userName: {
-    fontSize: 22,
+    fontSize: 32,
     color: '#ffffff',
     fontWeight: 'bold',
+    marginBottom: 10
   },
   aboutText: {
     fontSize: 16,

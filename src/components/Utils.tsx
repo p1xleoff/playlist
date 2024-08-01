@@ -120,7 +120,7 @@ const TxtInput: React.FC<InputProps> = ({ label, name, iconName, ...props }) => 
 
 ////////////BUTTTON
 type ButtonProps = {
-  title: string;
+  title: string | React.ReactElement;
   style?: StyleProp<ViewStyle>;
   onPress: () => void;
   disabled?: boolean;
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginHorizontal: 10,
     marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 3,
     alignItems: 'center',
     width: '100%',
     alignSelf: 'center',

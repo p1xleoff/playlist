@@ -13,8 +13,8 @@ const Reload = ({ onPress }: ReloadProps) => {
     const [reload, setReload] = useState(false);
     return (
         <View style={styles.container}>
-            <Header title=''/>
-            <SearchBar />
+            {/* <Header title=''/>
+            <SearchBar /> */}
             <View style={styles.icon}>
             {/* <Text style={{fontSize: 200, color: 'white'}}>=(</Text> */}
                 <Icon name="emoticon-dead-outline" size={200} color="#ffffff" />

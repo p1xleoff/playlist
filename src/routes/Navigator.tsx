@@ -27,95 +27,118 @@ import { Franchise, Game } from '../types/Game';
 import { Loading } from '../components/Loading';
 
 export type RootStackParamList = {
-  Base: undefined;
+  Tabs: undefined;
   Home: undefined;
-  Account: undefined;
-  Settings: undefined;
   Lists: undefined;
-  Search: undefined;
+  HomeStack: undefined;
+  ListsStack: undefined;
   Discover: undefined;
-  Landing: undefined;
-  Collection: undefined;
+  Settings: undefined;
+  Search: undefined;
+  GameDetails: { game: Game | Franchise };
   Login: undefined;
   Signup: undefined;
+  Landing: undefined;
+  Collection: undefined;
   Dummy: undefined;
   Data: undefined;
+  Account: undefined;
   Acknowledgements: undefined;
-  GameDetails: { game: Game | Franchise };
 };
 
+// Initialize QueryClient
 const queryClient = new QueryClient();
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const BottomTabNavigator = () => (
-  <Tab.Navigator
-    initialRouteName="Home"
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        if (route.name === 'Home') {
-          iconName = focused ? 'home' : 'home-outline';
-        } else if (route.name === 'Lists') {
-          iconName = focused ? 'format-list-text' : 'format-list-checks';
-        } else if (route.name === 'Discover') {
-          iconName = focused ? 'view-dashboard' : 'view-dashboard-outline';
-        } else {
-          iconName = 'help';
-        }
-        return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-      },
-      tabBarActiveTintColor: '#fff',
-      tabBarInactiveTintColor: 'gray',
-      tabBarStyle: {
-        height: 60,
-        backgroundColor: 'black',
-      },
-      tabBarItemStyle: {
-        marginTop: 5,
-        padding: 5,
-      },
-      tabBarLabelStyle: {
-        fontWeight: 'bold',
-        fontSize: 12,
-      },
-    })}
-  >
-    <Tab.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-    <Tab.Screen name="Lists" component={Lists} options={{ headerShown: false }} />
-    <Tab.Screen name="Discover" component={Discover} options={{ headerShown: false }}/>
-  </Tab.Navigator>
-);
-
-interface NavigatorProps {
-  user: FirebaseAuthTypes.User | null;
+// Stack for Home screen
+const HomeStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="GameDetails" component={GameDetails} />
+    </Stack.Navigator>
+  );
 }
 
-const Navigator: React.FC<NavigatorProps> = ({ user }) => {
+// Stack for Lists screen
+const ListsStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Lists" component={Lists} />
+      <Stack.Screen name="GameDetails" component={GameDetails} />
+      <Stack.Screen name="Collection" component={Collection} />
+    </Stack.Navigator>
+  );
+}
+
+// Bottom Tab Navigator
+const Tabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'HomeStack') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'ListsStack') {
+            iconName = focused ? 'format-list-text' : 'format-list-checks';
+          } else if (route.name === 'Discover') {
+            iconName = focused ? 'view-dashboard' : 'view-dashboard-outline';
+          } else {
+            iconName = 'help';
+          }
+          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+        },
+        headerShown: false, 
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          height: 60,
+          backgroundColor: 'black',
+        },
+        tabBarItemStyle: {
+          marginTop: 5,
+          padding: 5,
+        },
+        tabBarLabelStyle: {
+          fontWeight: 'bold',
+          fontSize: 12,
+        },
+      })
+    }
+    >
+      <Tab.Screen name="HomeStack" component={HomeStack} options={{ title: 'Home' }} />
+      <Tab.Screen name="ListsStack" component={ListsStack} options={{ title: 'Lists' }} />
+      <Tab.Screen name="Discover" component={Discover} options={{ title: 'Discover' }} />
+    </Tab.Navigator>
+  );
+}
+
+// Main Navigator
+const MainNavigator: React.FC<{ user: FirebaseAuthTypes.User | null }> = ({ user }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
-        <Stack.Navigator initialRouteName="Base">
+        <Stack.Navigator screenOptions={{ headerTintColor: '#fff', headerStyle: { backgroundColor: '#000' }, headerTitleStyle: { fontWeight: '900' } }}>
           {user ? (
             <>
-              <Stack.Screen name="Base" component={BottomTabNavigator} options={{ headerShown: false }} />
+              <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }}/>
+              <Stack.Screen name="Settings" component={Settings} />
               <Stack.Screen name="Account" component={Account} />
               <Stack.Screen name="GameDetails" component={GameDetails} options={{ headerShown: false }} />
               <Stack.Screen name="Search" component={Search} options={{ headerShown: false }} />
-              <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
-              <Stack.Screen name="Discover" component={Discover} options={{ headerShown: false }} />
-              <Stack.Screen name="Lists" component={Lists} options={{ headerShown: false }} />
-              <Stack.Screen name="Collection" component={Collection} options={{ headerShown: false }} />              
+              <Stack.Screen name="Collection" component={Collection} options={{headerTitle: ''}} />
               <Stack.Screen name="Dummy" component={Dummy} options={{ headerShown: false }} />
-              <Stack.Screen name="Data" component={Data} options={{ headerShown: false }} />
-              <Stack.Screen name="Acknowledgements" component={Acknowledgements} options={{ headerShown: false }} />
+              <Stack.Screen name="Data" component={Data} options={{headerTitle: 'Data and Storage'}} />
+              <Stack.Screen name="Acknowledgements" component={Acknowledgements} />
             </>
           ) : (
             <>
-              <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-              <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+              <Stack.Screen name="Login" component={Login}  options={{ headerShown: false }} />
+              <Stack.Screen name="Signup" component={Signup}  options={{ headerShown: false }} />
               {/* Uncomment the following line if you want to include Landing screen */}
-              {/* <Stack.Screen name="Landing" component={Landing} options={{ headerShown: false }} /> */}
+              {/* <Stack.Screen name="Landing" component={Landing} /> */}
             </>
           )}
         </Stack.Navigator>
@@ -124,4 +147,4 @@ const Navigator: React.FC<NavigatorProps> = ({ user }) => {
   );
 };
 
-export default Navigator;
+export default MainNavigator;

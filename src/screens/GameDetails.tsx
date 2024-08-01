@@ -19,6 +19,7 @@ import { RadioGroup } from '../components/Utils';
 import { listOptions, listLabels } from '../data/ListMaps';
 import Snackbar from 'react-native-snackbar';
 import { Loading } from '../components/Loading';
+import Reload from '../components/Reload';
 
 const GameDetails: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'GameDetails'>>();
@@ -32,7 +33,7 @@ const GameDetails: React.FC = () => {
 
 
   // Fetch game details
-  const { data: gameDetails, error: gameDetailsError, isLoading: gameDetailsLoading } = useFetchGameDetails(game.id);
+  const { data: gameDetails, error: gameDetailsError, isLoading: gameDetailsLoading, refetch: refetchGames } = useFetchGameDetails(game.id);
   const { data: screenshots, error: screenshotsError, isLoading: screenshotsLoading } = useFetchScreenShots(game.id);
   const { data: stores, error: storesError, isLoading: storesLoading } = useFetchGameStores(game.id);
   const { data: additions, error: additionsError, isLoading: additionsLoading } = useFetchAddtions(game.id);
@@ -60,13 +61,15 @@ const GameDetails: React.FC = () => {
     return <Loading />;
   }
 
+  //retry the games api request
+  const retryFetch = () => {
+    refetchGames();
+  };
+
   // Render error message
   if (!gameDetails) {
     return (
-      <View style={styles.errorContainer}>
-         <Text style={styles.errorText}>Oops! Something went wrong =(</Text>
-         <Text style={styles.errorText}>Try turning it off and on again</Text>
-      </View>
+      <Reload onPress={retryFetch} />
     );
   }
 
@@ -125,13 +128,13 @@ const GameDetails: React.FC = () => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}> 
+      <SearchBar />
+      <Text style={styles.title}>{gameDetails.name}</Text>
       <ScrollView>
-        <View style={styles.container}>
+        <View>
           <View style={{ marginBottom: 20 }}>
-            <SearchBar />
           </View>
-          <Text style={styles.title}>{gameDetails.name}</Text>
           <Image source={{ uri: gameDetails.background_image || 'https://picsum.photos/536/354' }} style={styles.image} />
 
           <View style={styles.badges}>

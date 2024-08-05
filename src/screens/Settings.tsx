@@ -30,18 +30,24 @@ import Card from '../components/Card';
 import { Separator, Badge, SettingsLink, RadioGroup, FloatBack } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { useGameCount } from '../hooks/listHooks';
-import { formatDate } from '../data/Date';
+
 import { Loading, SmallLoader } from '../components/Loading';
+import { pxStyles } from '../theme/useTheme';
+import { useTheme } from '../services/contexts/ThemeContext';
+import { formatDate } from '../utils/dateTime';
+
 
 type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
 // const sheetRef = useRef<BottomSheetMethods>(null);
 
 const Settings = ({ navigation }: SettingsProps) => {
+  const styles = useStyles();
+
   const { totalGames, loading } = useGameCount();
   const user = auth().currentUser;
   const userJoinDate = user?.metadata.creationTime;
-
+  
   //actions sheet
   const sheetRef = useRef<SheetHandle>(null);
   const themeActions = () => {
@@ -76,15 +82,17 @@ const Settings = ({ navigation }: SettingsProps) => {
 
 
   //radio button for theme
-  const [themeSelect, setThemeSelect] = useState<string>('systemDefault')
+  const { setCurrentTheme, currentTheme } = useTheme();
   const themeOptions: Option[] = [
-    { label: 'System Default', value: 'systemDefault' },
+    { label: 'System Default', value: 'systemTheme' },
     { label: 'Light', value: 'light' },
     { label: 'Dark', value: 'dark' },
   ]
   const handleThemeOption = (value: string) => {
-    setThemeSelect(value);
-  }
+    setCurrentTheme(value);
+  };
+
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <FloatBack onPress={() => navigation.goBack()}/> */}
@@ -99,7 +107,7 @@ const Settings = ({ navigation }: SettingsProps) => {
                 style={styles.avatar}
               /> */}
               {/* <View> */}
-                <Text style={styles.userName}>{user?.displayName}</Text>
+              <Text style={styles.userName}>{user?.displayName}</Text>
               {/* </View> */}
             </View>
 
@@ -158,24 +166,16 @@ const Settings = ({ navigation }: SettingsProps) => {
               </Card>
             </View>
 
-            <View style={styles.category}>
-              {/* <Text style={styles.categoryText}>Information</Text> */}
+            {/* <View style={styles.category}>
+              <Text style={styles.categoryText}>Information</Text>
               <Card>
                 <SettingsLink onPress={() => navigation.navigate('Acknowledgements')} iconName="information" title="Acknowledgements" />
               </Card>
-            </View>
+            </View> */}
 
             {/* about */}
             <Card>
-              <TouchableOpacity onPress={() => navigation.navigate('Dummy')}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', padding: 2, justifyContent: 'space-between' }}>
-                  <View>
-                    <Text style={{ fontSize: 18, fontWeight: '900', color: 'white' }}>playl1st</Text>
-                    <Text style={{ color: 'white', fontWeight: '600' }}>Version 0.1</Text>
-                  </View>
-                  <Icon name="cheese" size={IconSize.m} color="#ffffff" />
-                </View>
-              </TouchableOpacity>
+              <SettingsLink onPress={() => navigation.navigate('About')} iconName="information" title="About" />
             </Card>
 
             {/* logOut */}
@@ -195,7 +195,7 @@ const Settings = ({ navigation }: SettingsProps) => {
       <Sheet ref={sheetRef} title='Choose Theme'>
         <View>
           <Separator style={{ marginHorizontal: 10 }} />
-          <RadioGroup options={themeOptions} selectedOption={themeSelect} onChange={handleThemeOption} />
+          <RadioGroup options={themeOptions} selectedOption={currentTheme} onChange={handleThemeOption} />
         </View>
       </Sheet>
 
@@ -203,21 +203,21 @@ const Settings = ({ navigation }: SettingsProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: theme.background,
     paddingVertical: 10
   },
   text: {
-    color: '#000000',
+    color: theme.background,
     fontWeight: '900',
   },
   category: {
     // marginVertical: 7
   },
   categoryText: {
-    color: '#ffffff',
+    color: theme.primary,
     fontWeight: '900',
     fontSize: 16,
     marginLeft: 10,
@@ -237,19 +237,19 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 32,
-    color: '#ffffff',
+    color: theme.primary,
     fontWeight: 'bold',
     marginBottom: 10
   },
   aboutText: {
-    fontSize: 16,
-    color: '#d6d6d6',
+    fontSize: 18,
+    color: theme.primary,
     fontWeight: '900',
   },
   logOutText: {
     color: '#ff0000',
     marginLeft: 15,
   },
-});
+}));
 
 export default Settings;

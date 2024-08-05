@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import auth from '@react-native-firebase/auth'
-import { formatDate } from '../data/Date';
 import { SmallLoader } from '../components/Loading';
 import { useGameCount, useListGameCounts } from '../hooks/listHooks';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { listColors, listIcons } from '../data/ListMaps';
+import { pxStyles } from '../theme/useTheme';
+import { formatDate } from '../utils/dateTime';
 
 const Account = () => {
+  const styles = useStyles();
+
   const user = auth().currentUser;
   const userJoinDate = user?.metadata.creationTime;
   const userLastSignIn = user?.metadata.lastSignInTime;
@@ -97,18 +100,19 @@ const Account = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
     padding: 10,
   },
   card: {
-    backgroundColor: '#111',
+    backgroundColor: theme.card,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 3,
-    marginBottom: 5
+    marginBottom: 7,
+    elevation: 3
   },
   label: {
     fontSize: 18,
@@ -117,12 +121,12 @@ const styles = StyleSheet.create({
   },
   key: {
     fontSize: 16,
-    color: '#a7a7a7',
+    color: theme.secondary,
   },
   value: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: theme.primary,
   },
   error: {
     fontSize: 16,
@@ -145,13 +149,13 @@ const styles = StyleSheet.create({
   listName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#c5c5c5',
+    color: theme.secondary,
   },
   count: {
     fontSize: 28,
-    color: '#fff',
+    color: theme.primary,
     fontWeight: '900'
   },
-});
+}));
 
 export default Account;

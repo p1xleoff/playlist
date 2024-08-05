@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Header from './Header';
 import SearchBar from './SearchBar';
+import { pxStyles } from '../theme/useTheme';
 
 
 type ReloadProps = {
@@ -10,14 +11,15 @@ type ReloadProps = {
 }
 
 const Reload = ({ onPress }: ReloadProps) => {
-    const [reload, setReload] = useState(false);
+    const styles = useStyles();
+    
     return (
         <View style={styles.container}>
             {/* <Header title=''/>
             <SearchBar /> */}
             <View style={styles.icon}>
             {/* <Text style={{fontSize: 200, color: 'white'}}>=(</Text> */}
-                <Icon name="emoticon-dead-outline" size={200} color="#ffffff" />
+                <Icon name="emoticon-dead-outline" size={200} style={styles.emote} />
             </View>
 
             <View style={styles.infoContainer}>
@@ -36,10 +38,10 @@ const Reload = ({ onPress }: ReloadProps) => {
     )
 }
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#000000',
+        backgroundColor: theme.background,
         paddingHorizontal: 20
     },
     icon: {
@@ -47,13 +49,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
+    emote: {
+        color: theme.secondary
+    },
     infoContainer: {
         flex: 1,
         justifyContent: 'flex-end',
         paddingBottom: 80,
     },
     button: {
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.primary,
         padding: 7,
         paddingHorizontal: 25,
         alignItems: 'center',
@@ -65,24 +70,24 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     buttonText: {
-        color: '#000000',
+        color: theme.background,
         fontWeight: '900',
         fontSize: 18,
     },
     errorTitle: {
-        color: '#e0e0e0',
+        color: theme.tertiary,
         fontWeight: '600',
         fontSize: 18,
         textAlign: 'center',
         marginVertical: 5
     },
     errorText: {
-        color: '#e0e0e0',
+        color: theme.secondary,
         fontWeight: '600',
         fontSize: 16,
         textAlign: 'center',
         marginVertical: 2
     }
-})
+}));
 
 export default Reload;

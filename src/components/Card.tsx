@@ -1,5 +1,6 @@
 import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native'
 import React from 'react'
+import { pxStyles } from '../theme/useTheme';
 
 type CardProps = {
   children: JSX.Element | JSX.Element[];
@@ -7,6 +8,7 @@ type CardProps = {
 }
 
 const Card = ({ children, style }: CardProps) => {
+  const styles = useStyles();
   return (
     <View style={[styles.card, style]}>
       {children}
@@ -14,16 +16,15 @@ const Card = ({ children, style }: CardProps) => {
   )
 }
 
-
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   card: {
     padding: 15,
     marginHorizontal: 10,
     marginVertical: 3,
     borderRadius: 3,
-    backgroundColor: '#111111',
-    elevation: 5
-  }
-})
+    backgroundColor: theme.card,
+    elevation: 5,
+  },
+}));
 
 export default Card;

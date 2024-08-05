@@ -7,11 +7,12 @@ import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import auth from '@react-native-firebase/auth';
 import { deleteCollectionGames } from '../services/auth/firebase';
+import { pxStyles } from '../theme/useTheme';
 
 type DataProps = NativeStackScreenProps<RootStackParamList, 'Data'>;
 
 const Data = ({ navigation }: DataProps) => {
-
+    const styles = useStyles()
     const userId = auth().currentUser?.uid;
 
     const handleDeleteAllGames = async () => {
@@ -37,7 +38,7 @@ const Data = ({ navigation }: DataProps) => {
             Alert.alert("Error", "User not found.");
         }
     };
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
@@ -46,7 +47,7 @@ const Data = ({ navigation }: DataProps) => {
                     <Text style={styles.text}>This action will permanantly delete all your games from the app and clear the online cloud storage. There will be no way to restore it.</Text>
                     <Text style={styles.text}>All the games you added will be lost forever.</Text>
                     <TouchableOpacity style={styles.links} onPress={handleDeleteAllGames}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#fff' }}>Delete Everything</Text>
+                        <Text style={styles.linkText}>Delete Everything</Text>
                         <Icon name="delete-outline" color='tomato' size={24} />
                     </TouchableOpacity>
                 </View>
@@ -55,10 +56,10 @@ const Data = ({ navigation }: DataProps) => {
     );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: theme.background,
     },
     innerContainer: {
         marginHorizontal: "3%",
@@ -66,32 +67,36 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#fff',
+        color: theme.primary,
         marginBottom: 10
     },
     text: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#858585',
+        color: theme.secondary,
         marginBottom: 15
     },
     card: {
-        backgroundColor: '#101010',
+        backgroundColor: theme.card,
         elevation: 10,
-        borderColor: '#fff',
         padding: 15,
         borderRadius: 7,
         marginVertical: 10,
     },
     links: {
         flexDirection: 'row',
-        backgroundColor: '#202020',
+        backgroundColor: theme.primary,
         elevation: 10,
         padding: 15,
         borderRadius: 7,
         justifyContent: 'space-between',
         marginVertical: 10,
     },
-});
+    linkText: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: theme.background
+    }
+}));
 
 export default Data;

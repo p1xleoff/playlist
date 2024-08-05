@@ -4,6 +4,7 @@ import { RootStackParamList } from '../routes/Navigator';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import SearchBar from './SearchBar';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { pxStyles } from '../theme/useTheme';
 type HeaderProps = {
     title?: string;
     children?: JSX.Element | JSX.Element[];
@@ -11,20 +12,21 @@ type HeaderProps = {
 }
 
 const Header = ({ title, children, style }: HeaderProps) => {
+    const styles = useStyles();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-                <Icon name='cog-outline' size={28} color='#e0e0e0' />
+                <Icon name='cog-outline' size={28} style={styles.icon} />
             </TouchableOpacity>
         </View>
     )
 }
 
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -35,8 +37,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '900',
-        color: '#dadada'
+        color: theme.tertiary
     },
-})
+    icon: {
+        color: theme.tertiary
+    }
+}));
 
 export default Header;

@@ -14,12 +14,15 @@ import Header from '../components/Header';
 import { ReGame, getUserLists } from '../services/auth/firebase';
 import { Loading } from '../components/Loading';
 import { dashList } from '../data/ListMaps';
+import { pxStyles } from '../theme/useTheme';
 
 //type cheking
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 //main functional component
 const Home = ({ navigation }: HomeProps) => {
+  const styles = useStyles();
+  
   const [games, setGames] = useState<{ [key: string]: ReGame[] }>({});
   const [loading, setLoading] = useState(true);
   const userId = auth().currentUser?.uid;
@@ -82,14 +85,14 @@ const Home = ({ navigation }: HomeProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
   },
   listTitle: {
-    color: '#d4d4d4',
+    color: theme.secondary,
     fontWeight: 'bold',
     fontSize: 22,
     marginBottom: 7,
@@ -108,11 +111,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   noGamesText: {
-    color: '#d4d4d4',
+    color: theme.secondary,
     fontSize: 18,
     textAlign: 'center',
     fontWeight: '600'
   },
-});
+}));
 
 export default Home;

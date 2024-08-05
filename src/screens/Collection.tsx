@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { ReGame, getUserLists } from '../services/auth/firebase';
-import {Loading}from '../components/Loading';
+import { Loading } from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import { listColors, listSort } from '../data/ListMaps';
@@ -10,10 +10,13 @@ import SearchBar from '../components/SearchBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { getRelativeTime } from '../utils/dateTime';
 import { FloatBack } from '../components/Utils';
+import { pxStyles } from '../theme/useTheme';
 
 type AllGamesProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;
 
 const AllGames = ({ navigation }: AllGamesProps) => {
+    const styles = useStyles();
+
     const [allGames, setAllGames] = useState<{ game: ReGame, listId: string }[]>([]);
     const [loading, setLoading] = useState(true);
     const [sortCriteria, setSortCriteria] = useState<string>('name');
@@ -73,7 +76,7 @@ const AllGames = ({ navigation }: AllGamesProps) => {
             </View>
 
             <TouchableOpacity style={styles.sortButton} onPress={toggleSortCriteria}>
-                <Icon name="arrow-right-arrow-left" size={14} color="#ebebeb" style={{transform: [{ rotate: '90deg'}]}}/>
+                <Icon name="arrow-right-arrow-left" size={14} style={styles.icon} />
                 <Text style={styles.sortText}>{listSort[sortCriteria]}</Text>
             </TouchableOpacity>
 
@@ -88,10 +91,10 @@ const AllGames = ({ navigation }: AllGamesProps) => {
                             navigation.navigate('GameDetails', { game: gameDetails });
                         }}
                     >
-                        <Image source={{ uri: game.background_image }} style={styles.image} />
+                        <Image source={{ uri: game.background_image }} style={{ width: 50, height: 50, borderRadius: 2 }} />
                         <View style={styles.gameDetails}>
                             <Text style={styles.title} numberOfLines={1}>{game.name}</Text>
-                            <View style={{flexDirection: 'row'}}>
+                            <View style={{ flexDirection: 'row' }}>
                                 <Text style={[styles.badge, { color: listColors[game.listName] }]}>{game.listName.charAt(0).toUpperCase() + game.listName.slice(1)}
                                     <Text style={styles.date}> | {getRelativeTime(new Date(game.addedDate))}</Text>
                                 </Text>
@@ -104,10 +107,10 @@ const AllGames = ({ navigation }: AllGamesProps) => {
     );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#000000',
+        backgroundColor: theme.background,
     },
     header: {
         flexDirection: 'row',
@@ -122,31 +125,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
     },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 2
-    },
     gameDetails: {
         marginLeft: 10,
         flex: 1
     },
     title: {
-        color: '#fff',
+        color: theme.primary,
         fontWeight: '900',
         fontSize: 16
     },
     date: {
-        color: '#c7c7c7'
-    },
-    listName: {
-        color: '#aaa',
-        fontSize: 12,
-        marginTop: 4
+        color: theme.secondary,
     },
     badge: {
         borderRadius: 1,
-        color: '#cecece',
         fontWeight: '600',
         marginRight: 10
     },
@@ -159,10 +151,14 @@ const styles = StyleSheet.create({
     sortText: {
         marginRight: 5,
         fontSize: 14,
-        color: '#e9e9e9',
+        color: theme.secondary,
         fontWeight: '900',
         marginLeft: 5
     },
-});
+    icon: {
+        color: theme.secondary,
+        transform: [{ rotate: '90deg' }]
+    }
+}));
 
 export default AllGames;

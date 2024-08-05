@@ -1,4 +1,4 @@
-package com.playlist
+package com.p1xle.playlist
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity

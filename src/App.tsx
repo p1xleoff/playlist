@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import Navigator from './routes/Navigator';  // Adjust the path as per your project structure
-import Router from './routes/Router';
+import Navigator from './routes/Navigator';
+import { ThemeProvider } from './services/contexts/ThemeContext';
+import { Loading } from './components/Loading';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
@@ -18,12 +19,14 @@ const App: React.FC = () => {
   }, [initializing]);
 
   if (initializing) {
-    return null; // Or some loading indicator
+    return <Loading />; // Or some loading indicator
   }
 
   return (
     <NavigationContainer>
-      <Navigator user={user} />
+      <ThemeProvider>
+        <Navigator user={user} />
+      </ThemeProvider>
     </NavigationContainer>
   );
 };

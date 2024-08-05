@@ -7,13 +7,16 @@ import { platformIcons } from '../data/iconMaps';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import {Loading} from './Loading';
+import { Loading } from './Loading';
+import { pxStyles } from '../theme/useTheme';
 
 interface SearchResultsProps {
   query: string;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
+  const styles = useStyles();
+
   const { data: searchResults, error: searchError, isLoading: searchLoading } = useSearchGames(query);
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -21,13 +24,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
     const platforms = item.parent_platforms && item.parent_platforms.length > 0 ?
       item.parent_platforms.map(platform => {
         const iconName = platformIcons[platform.platform.name as keyof typeof platformIcons] || platformIcons.defaultIcon;
-        return <Icon key={platform.platform.id} name={iconName} size={22} color="#eeeeee" style={{ marginRight: 5 }} />;
+        return <Icon key={platform.platform.id} name={iconName} size={22} style={styles.platIcon} />;
       }) : null;
 
     return (
       <Pressable onPress={() => navigation.navigate('GameDetails', { game: item })}>
         <View style={styles.itemContainer}>
-          <Image source={{ uri: item.background_image || 'https://picsum.photos/536/354' }} style={styles.image} />
+          <Image source={{ uri: item.background_image || 'https://picsum.photos/536/354' }} style={{ width: 55, height: 70, borderRadius: 3 }} />
           <View style={styles.result}>
             <Text style={styles.itemTitle}>
               {item.name}
@@ -64,7 +67,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ query }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   listContainer: {
     paddingBottom: 100,
   },
@@ -81,16 +84,11 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#ececec',
+    color: theme.tertiary,
   },
   itemSubtitle: {
     fontSize: 16,
     color: '#a7a7a7',
-  },
-  image: {
-    width: 55,
-    height: 70,
-    borderRadius: 3
   },
   platforms: {
     flexDirection: 'row',
@@ -104,11 +102,15 @@ const styles = StyleSheet.create({
   },
   noResultsText: {
     fontSize: 16,
-    color: '#ffffff',
+    color: theme.secondary,
     textAlign: 'center',
     marginTop: 20,
     fontWeight: 'bold'
   },
-});
+  platIcon: {
+    marginRight: 5,
+    color: theme.primary
+  }
+}));
 
 export default SearchResults;

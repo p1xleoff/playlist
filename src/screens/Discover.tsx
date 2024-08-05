@@ -12,10 +12,13 @@ import { RadioGroup } from '../components/Utils';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { DiscoverSortOptions, GenreOptions } from '../data/discoverMaps';
 import Reload from '../components/Reload';
+import { pxStyles } from '../theme/useTheme';
 
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 
 const Discover = ({navigation}: DiscoverProps) => {
+  const styles = useStyles();
+
   const [order, setOrder] = useState('popular');
   const [genre, setGenre] = useState('');
 
@@ -95,12 +98,12 @@ const Discover = ({navigation}: DiscoverProps) => {
 
       <View style={styles.sortContainer}>
         <TouchableOpacity onPress={() => orderSheet.current?.present()} style={styles.sortButton}>
-          <Icon name="arrow-right-arrow-left" size={14} color="#000000" style={{ transform: [{ rotate: '90deg' }] }} />
+          <Icon name="arrow-right-arrow-left" size={14} style={styles.icon} />
           <Text style={styles.sortText}>{order ? orderLabel(order) : 'Order By'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => genreSheet.current?.present()} style={styles.sortButton}>
-          <Icon name="arrow-right-arrow-left" size={14} color="#000000" style={{ transform: [{ rotate: '90deg' }] }} />
+          <Icon name="arrow-right-arrow-left" size={14} style={styles.icon} />
           <Text style={styles.sortText}>{genre ? genreLabel(genre) : 'Genre'}</Text>
         </TouchableOpacity>
       </View>
@@ -135,10 +138,10 @@ const Discover = ({navigation}: DiscoverProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
     paddingHorizontal: 10,
   },
   sortContainer: {
@@ -149,24 +152,24 @@ const styles = StyleSheet.create({
   sortButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     paddingVertical: 2,
-    backgroundColor: '#ffffff',
     marginEnd: 10,
-    borderRadius: 3
+    borderRadius: 222,
+    borderWidth: 1,
+    borderColor: theme.secondary
   },
   sortText: {
     marginRight: 5,
     fontSize: 16,
-    color: '#000000',
+    color: theme.secondary,
     fontWeight: 'bold',
-    marginLeft: 5
+    marginLeft: 5,
   },
-  header: {
-    color: 'white',
-    fontSize: 22,
-    marginVertical: 10,
-  },
-});
+  icon: {
+    color: theme.secondary,
+    transform: [{ rotate: '90deg' }]
+}
+}));
 
 export default Discover;

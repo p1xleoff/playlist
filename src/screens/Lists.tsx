@@ -4,7 +4,7 @@ import auth from '@react-native-firebase/auth';
 import { deleteGameFromList, getCurrentUser, getUserLists, moveGameToList } from '../services/auth/firebase';
 import { ReGame } from '../services/auth/firebase'; // Update the import
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import {Loading} from '../components/Loading';
+import { Loading } from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import { getRelativeTime } from '../utils/dateTime';
@@ -15,6 +15,7 @@ import Snackbar from 'react-native-snackbar';
 import { listIcons, listDesc, listColors } from '../data/ListMaps';
 import { Separator } from '../components/Utils';
 import Header from '../components/Header';
+import { pxStyles } from '../theme/useTheme';
 
 type ListsProps = NativeStackScreenProps<RootStackParamList, 'Lists'>;
 
@@ -22,6 +23,8 @@ type ListsProps = NativeStackScreenProps<RootStackParamList, 'Lists'>;
 const initialLayout = { width: 500 };
 
 const Lists = ({ navigation }: ListsProps) => {
+  const styles = useStyles();
+
   const [lists, setLists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,14 +119,14 @@ const Lists = ({ navigation }: ListsProps) => {
           <View style={styles.listInfo}>
             <View style={{ flexDirection: 'row' }}>
               <Icon name={listIcons[route.key]} size={24} color={colors} />
-              <Text style={[styles.title, { marginLeft: 10, color: colors}]}>{listDesc[route.key]}</Text>
+              <Text style={[styles.title, { marginLeft: 10, color: colors }]}>{listDesc[route.key]}</Text>
             </View>
             <Text style={styles.count}>{list?.gameCount || null}</Text>
           </View>
           <FlatList
             data={lists.find(list => list.id === route.key)?.games || []}
             keyExtractor={(game) => game.id.toString()}
-            style={{marginBottom: 60}}
+            style={{ marginBottom: 60 }}
             renderItem={({ item: game }: { item: ReGame }) => (
               <View>
                 <TouchableOpacity
@@ -137,7 +140,7 @@ const Lists = ({ navigation }: ListsProps) => {
                     setSourceList(route.key);
                     sheetRef.current?.present();
                   }}>
-                  <Image source={{ uri: game.background_image }} style={styles.image} />
+                  <Image source={{ uri: game.background_image }} style={{ width: 50, height: 50, borderRadius: 1, marginRight: 10 }} />
                   <View style={styles.gameDetails}>
                     <Text style={styles.title} numberOfLines={1}>{game.name}</Text>
                     <Text style={styles.addedDate}>{`Added ${getRelativeTime(new Date(game.addedDate))}`}</Text>
@@ -147,7 +150,7 @@ const Lists = ({ navigation }: ListsProps) => {
                     setSourceList(route.key);
                     sheetRef.current?.present();
                   }}>
-                    <Icon name="dots-vertical" color='#fff' size={24} style={{ marginLeft: 10 }} />
+                    <Icon name="dots-vertical" color='#fff' size={24} style={[styles.icon, { marginLeft: 10 }]} />
                   </Pressable>
                 </TouchableOpacity>
               </View>
@@ -162,7 +165,7 @@ const Lists = ({ navigation }: ListsProps) => {
   const renderTabBar = (props: any) => (
     <View style={styles.container}>
       <View style={{ paddingHorizontal: 10 }}>
-      <Header title='Your Lists' />
+        <Header title='Your Lists' />
         <SearchBar />
       </View>
       <TabBar
@@ -171,7 +174,6 @@ const Lists = ({ navigation }: ListsProps) => {
         tabStyle={styles.tab}
         labelStyle={styles.label}
         indicatorStyle={styles.indicator}
-        activeColor='#ffffff'
         inactiveColor='#919191'
         renderLabel={({ route, color }) => {
           const list = lists.find(list => list.id === route.key);
@@ -196,9 +198,9 @@ const Lists = ({ navigation }: ListsProps) => {
                   onPress={() => handleMoveGame(list.id)}
                   style={styles.actionListItem}
                 >
-                  <Icon name={listIcons[list.id] || 'progress-question'} size={24} color='#ffffff' />
+                  <Icon name={listIcons[list.id] || 'progress-question'} size={24} color={listColors[list.id]} />
                   <Text style={styles.actionListText}>
-                    <Text style={{ color: '#c7c7c7' }}>Move to </Text>
+                    <Text style={styles.title}>Move to </Text>
                     {list.id.charAt(0).toUpperCase() + list.id.slice(1)}</Text>
                 </TouchableOpacity>
               ))}
@@ -235,9 +237,9 @@ const Lists = ({ navigation }: ListsProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: theme.background,
   },
   gameCard: {
     paddingVertical: 5,
@@ -251,23 +253,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: '#ffffff',
+    color: theme.primary,
     fontSize: 16,
     fontWeight: '900',
   },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 1,
-    marginRight: 10,
-  },
   addedDate: {
-    color: '#afafaf',
+    color: theme.secondary,
     fontWeight: '600',
     fontSize: 12,
   },
   tabBar: {
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
   },
   tab: {
     flex: 1,
@@ -275,17 +271,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  listInfo: { 
-    flexDirection: 'row', 
-    margin: 10, 
-    justifyContent: 'space-between', 
+  listInfo: {
+    flexDirection: 'row',
+    margin: 10,
+    justifyContent: 'space-between',
   },
   label: {
     fontWeight: '900',
-    color: '#fff',
+    color: theme.primary,
   },
   count: {
-    color: '#e0e0e0',
+    color: theme.secondary,
     fontWeight: '900',
     marginRight: 10
   },
@@ -301,11 +297,14 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   actionListText: {
-    color: '#fff',
+    color: theme.primary,
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 10
+  },
+  icon: {
+    color: theme.primary
   }
-});
+}));
 
 export default Lists;

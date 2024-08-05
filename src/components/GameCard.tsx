@@ -6,19 +6,22 @@ import { Button } from './Utils';
 import { platformIcons } from '../data/iconMaps';
 import { NavigationProp, StackActions, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
+import { pxStyles } from '../theme/useTheme';
 
 interface GameCardProps {
     game: Game;
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game }) => {
+    const styles = useStyles();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
     const platforms =
         game.parent_platforms && game.parent_platforms.length > 0 ?
             game.parent_platforms.map(platform => {
                 const iconName = platformIcons[platform.platform.name as keyof typeof platformIcons] ||
                     platformIcons.defaultIcon;
-                return <Icon key={platform.platform.id} name={iconName} size={22} color={'#ffffff'} />
+                return <Icon key={platform.platform.id} name={iconName} size={22} style={styles.icon} />
             }) : null;
 
     const releaseDate = game.released === "TBA" ? "TBA" : game.released?.slice(0, 4);
@@ -30,7 +33,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
     return (
         <View style={styles.container}>
             <Pressable onPress={openGame}>
-                <Image source={{ uri: game.background_image }} style={styles.image} />
+                <Image source={game.background_image ? { uri: game.background_image } : require('../assets/images/noImg.jpg')} style={{ width: '100%', height: 200, borderTopLeftRadius: 5, borderTopRightRadius: 5 }} />
                 <View style={styles.infos}>
                     <Text style={styles.title}>{game.name}
                         <Text style={styles.text}>{releaseDate ? `(${releaseDate})` : ""}</Text>
@@ -41,7 +44,7 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <Icon name='star' size={20} color={'gold'} />
-                            <Text style={[styles.rating, { color: 'white' }]}>{game.rating}</Text>
+                            <Text style={styles.rating}>{game.rating}</Text>
                             {/* <View style={{ flexDirection: 'row' }}>
                             <Image source={{ uri: 'https://img.icons8.com/?size=48&id=YaSzxFsOJh3a&format=png' }} style={{ width: 20, height: 20 }} />
                         </View> */}
@@ -59,13 +62,15 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
 
 //card for discover component
 const DiscoverCard: React.FC<GameCardProps> = ({ game }) => {
+    const styles = useStyles();
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
     const platforms =
         game.parent_platforms && game.parent_platforms.length > 0 ?
             game.parent_platforms.map(platform => {
                 const iconName = platformIcons[platform.platform.name as keyof typeof platformIcons] ||
                     platformIcons.defaultIcon;
-                return <Icon key={platform.platform.id} name={iconName} size={22} color={'#000000'} style={{ marginHorizontal: 2 }} />
+                return <Icon key={platform.platform.id} name={iconName} size={22} style={styles.icon} />
             }) : null;
 
     const releaseDate = game.released === "TBA" ? "TBA" : game.released?.slice(0, 4);
@@ -78,7 +83,9 @@ const DiscoverCard: React.FC<GameCardProps> = ({ game }) => {
     return (
         <View style={styles.container}>
             <Pressable onPress={openGame}>
-                <Image source={{ uri: game.background_image }} style={styles.image} />
+                <Image source={game.background_image ? { uri: game.background_image } : require('../assets/images/noImg.jpg')} style={{
+                    width: '100%', height: 200, borderTopLeftRadius: 5, borderTopRightRadius: 5
+                }} />
                 <View style={styles.infos}>
                     <Text style={styles.title}>{game.name}
                         <Text style={styles.text}>{releaseDate ? `(${releaseDate})` : ""}</Text>
@@ -103,36 +110,29 @@ const DiscoverCard: React.FC<GameCardProps> = ({ game }) => {
 }
 
 
-
-
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         flex: 1,
-        backgroundColor: '#272727',
-        elevation: 5,
+        backgroundColor: theme.card,
+        elevation: 2,
         borderRadius: 5,
         marginVertical: 5,
+        marginHorizontal: 2
     },
     text: {
-        color: '#f3f3f3'
-    },
-    image: {
-        width: '100%',
-        height: 200,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5
+        color: theme.secondary
     },
     infos: {
         padding: 10,
         // alignItems: 'center'
     },
     title: {
-        color: '#ffffff',
+        color: theme.primary,
         fontWeight: 'bold',
         fontSize: 18,
     },
     rating: {
-        color: '#000000',
+        color: theme.primary,
         fontWeight: '600'
     },
     badgeStrip: {
@@ -146,12 +146,16 @@ const styles = StyleSheet.create({
     badge: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.card,
+        elevation: 5,
         paddingVertical: 2,
         paddingHorizontal: 7,
         marginEnd: 5,
         borderRadius: 3
+    },
+    icon: {
+        color: theme.primary
     }
-})
+}));
 
 export { GameCard, DiscoverCard };

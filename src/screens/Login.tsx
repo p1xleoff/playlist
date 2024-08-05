@@ -5,13 +5,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { logIn } from '../services/auth/firebase';
 import { Button } from '../components/Utils';
 import { RootStackParamList } from '../routes/Navigator';
-import { SmallLoader } from '../components/Loading';
-import { Form, Formik } from 'formik';
+import { Loader } from '../components/Loading';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { pxStyles } from '../theme/useTheme';
 
 type LoginProps = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const Login = () => {
+  const styles = useStyles();
   const navigation = useNavigation<LoginProps>();
 
   const initialValues = {
@@ -38,6 +40,8 @@ const Login = () => {
         setErrors({ password: 'Incorrect password' });
       } else if (error.code === 'auth/user-not-found') {
         setErrors({ email: 'User not found' });
+      } else if (error.code === 'auth/invalid-credential') {
+        setErrors({ email: 'Invalid Credentials' });
       } else {
         setErrors({ general: 'Failed to log in' });
       }
@@ -56,6 +60,7 @@ const Login = () => {
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
           <View style={styles.inputContainer}>
             <Text style={styles.title}>Login</Text>
+            {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
             <TextInput
               value={values.email}
               onChangeText={handleChange('email')}
@@ -67,7 +72,7 @@ const Login = () => {
               autoCapitalize="none"
               cursorColor='#fff'
             />
-            {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
+            {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             <TextInput
               value={values.password}
               onChangeText={handleChange('password')}
@@ -78,9 +83,8 @@ const Login = () => {
               cursorColor='#fff'
               secureTextEntry
             />
-            {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
             <Button
-              title={isSubmitting ? <SmallLoader /> : 'Login'}
+              title={isSubmitting ? <Loader /> : 'Login'}
               onPress={handleSubmit}
               style={styles.button}
             />
@@ -96,10 +100,10 @@ const Login = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
   },
   inputContainer: {
     flex: 1,
@@ -108,38 +112,41 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   input: {
-    backgroundColor: '#111111',
+    backgroundColor: theme.background,
     padding: 10,
     marginVertical: 10,
     borderRadius: 3,
-    color: '#ffffff',
-    elevation: 5,
+    color: theme.primary,
+    borderWidth: 1,
+    borderColor: theme.primary,
     fontWeight: '900',
   },
   title: {
     fontSize: 44,
     marginBottom: 20,
     fontWeight: '900',
-    color: '#ffffff'
+    color: theme.primary
   },
   button: {
     marginTop: 20,
+    height: 45,
+
   },
   text: {
     marginTop: 15,
     alignSelf: 'center',
     fontSize: 16,
-    color: '#ffffff'
+    color: theme.primary
   },
   loginLink: {
-    color: '#ffbb00',
+    color: '#ff7b00',
     fontWeight: '900',
     fontSize: 18
   },
   errorText: {
     color: '#ff1e00',
     fontWeight: '600'
-},
-});
+  },
+}));
 
 export default Login;

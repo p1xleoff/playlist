@@ -20,10 +20,13 @@ import { listOptions, listLabels } from '../data/ListMaps';
 import Snackbar from 'react-native-snackbar';
 import { Loading } from '../components/Loading';
 import Reload from '../components/Reload';
+import { pxStyles } from '../theme/useTheme';
 
 const GameDetails: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'GameDetails'>>();
   const { game } = route.params;
+
+  const styles = useStyles();
 
   // State for selected list
   const [selectedList, setSelectedList] = useState<string | null>(null);
@@ -81,7 +84,7 @@ const GameDetails: React.FC = () => {
   // Render platform icons
   const platforms = game.parent_platforms?.map(platform => {
     const iconName = platformIcons[platform.platform.name as keyof typeof platformIcons] || platformIcons.defaultIcon;
-    return <Icon key={platform.platform.id} name={iconName} size={22} color="#1d1d1d" style={{ marginHorizontal: 3 }} />;
+    return <Icon key={platform.platform.id} name={iconName} size={22} style={styles.platIcon} />;
   }) || null;
 
   // Handlers for list selection and adding game to the list
@@ -128,19 +131,19 @@ const GameDetails: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}> 
+    <SafeAreaView style={styles.container} >
       <SearchBar />
       <Text style={styles.title}>{gameDetails.name}</Text>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <View style={{ marginBottom: 20 }}>
           </View>
-          <Image source={{ uri: gameDetails.background_image || 'https://picsum.photos/536/354' }} style={styles.image} />
-
+          <Image source={gameDetails.background_image ? { uri: gameDetails.background_image } : require('../assets/images/noImg.jpg')}
+            style={{ width: '100%', height: 200, borderRadius: 5, marginBottom: 10 }} />
           <View style={styles.badges}>
             <View style={{ flexDirection: 'row', }}>
-              <Icon name='star' size={20} color={'#eeeeee'} />
-              <Text style={{ fontWeight: 'bold', color: '#ffffff', fontSize: 14 }}>{gameDetails.rating}</Text>
+              <Icon name='star' size={20} color={'gold'} />
+              <Text style={styles.rating}>{gameDetails.rating}</Text>
             </View>
             <View style={[styles.platforms]}>
               {platforms}
@@ -186,7 +189,7 @@ const GameDetails: React.FC = () => {
             <View style={[styles.infos, { alignItems: 'center' }]}>
               <Text style={styles.key}>Website</Text>
               <Text style={[styles.value, { textDecorationLine: 'underline' }]} onPress={() => Linking.openURL(gameDetails.website)}>Official Website </Text>
-              <MaterialIcon name='open-in-new' size={12} color='white' />
+              <MaterialIcon name='open-in-new' size={12} style={styles.icon} />
             </View>
 
           </View>
@@ -227,7 +230,7 @@ const GameDetails: React.FC = () => {
                     return (
                       <Pressable key={store.id} onPress={() => openStore(store.url)} style={styles.store}>
                         {/* <Icon name={iconName} size={24} color={'#ffffff'} /> */}
-                        <Image source={{ uri: imageUri }} style={styles.storeImage} />
+                        <Image source={{ uri: imageUri }} style={{ width: 20, height: 20, resizeMode: 'contain' }} />
                         {/* {imageUri && <Image source={imageUri} style={styles.storeImage} />} */}
                         <Text style={styles.storeText}>{storeMatch.store.name}</Text>
                       </Pressable>
@@ -373,29 +376,23 @@ const GameDetails: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
     padding: 15,
-    backgroundColor: 'black',
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    borderRadius: 5,
-    marginBottom: 10,
+    backgroundColor: theme.background,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#ffffff'
+    color: theme.primary
   },
   errorContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    backgroundColor: theme.background,
   },
   errorText: {
     color: '#ff3c00',
@@ -409,8 +406,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   badge: {
-    backgroundColor: '#ececec',
-    color: '#000000',
+    backgroundColor: theme.primary,
+    color: theme.background,
     fontWeight: '600',
     paddingHorizontal: 10,
     paddingVertical: 3,
@@ -421,9 +418,19 @@ const styles = StyleSheet.create({
   platforms: {
     flexDirection: 'row',
     marginVertical: 5,
-    backgroundColor: 'white',
+    backgroundColor: theme.primary,
     borderRadius: 3,
-    padding: 2
+    padding: 2,
+    elevation: 5
+  },
+  rating: {
+    fontWeight: 'bold',
+    color: theme.primary,
+    fontSize: 14
+  },
+  platIcon: {
+    color: theme.background,
+    marginHorizontal: 3
   },
   infoCard: {},
   infos: {
@@ -433,7 +440,7 @@ const styles = StyleSheet.create({
   key: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: '#b6b6b6'
+    color: theme.secondary
   },
   value: {
     flex: 1,
@@ -441,10 +448,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     flexWrap: 'wrap',
-    color: '#ffffff'
+    color: theme.primary
   },
   desc: {
-    color: '#e7e7e7',
+    color: theme.secondary,
     fontWeight: 'bold',
     // marginVertical: 10,
     fontSize: 16,
@@ -455,7 +462,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#e9e9e9',
+    color: theme.tertiary,
     marginBottom: 2,
   },
   storeContainer: {
@@ -469,7 +476,7 @@ const styles = StyleSheet.create({
   store: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#dadada',
+    backgroundColor: theme.tertiary,
     paddingHorizontal: 10,
     paddingVertical: 12,
     // marginEnd: 5,
@@ -479,19 +486,14 @@ const styles = StyleSheet.create({
   },
   storeText: {
     fontSize: 16,
-    color: '#111111',
+    color: theme.background,
     fontWeight: 'bold',
     marginLeft: 7,
-  },
-  storeImage: {
-    width: 20, // adjust the size as needed
-    height: 20, // adjust the size as needed
-    resizeMode: 'contain', // adjust the resizing mode if needed
   },
   metascore: {
     width: 50,
     height: 50,
-    backgroundColor: 'white',
+    backgroundColor: theme.tertiary,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,
@@ -499,14 +501,18 @@ const styles = StyleSheet.create({
   },
   metanumber: {
     fontSize: 24,
-    color: 'black',
+    color: theme.background,
     fontWeight: 'bold'
   },
   metaText: {
     fontSize: 22,
-    color: '#ffffff',
+    color: theme.primary,
     fontWeight: 'bold'
   },
-});
+  icon: {
+    color: theme.primary,
+    fontWeight: 'bold'
+  },
+}));
 
 export default GameDetails;

@@ -3,6 +3,7 @@ import { View, TextInput, StyleSheet, Pressable, Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
+import { pxStyles } from '../theme/useTheme';
 
 interface SearchBarProps {
   searchIcon?: string;
@@ -16,6 +17,8 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ searchIcon = "magnify", clearIcon = "close", exitIcon = "arrow-left", onExitPress, value, onChangeText, autoFocus }: SearchBarProps) => {
 
+  const styles = useStyles();
+  
   const [inputValue, setInputValue] = useState<string>(value ?? '');
   const inputRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -81,7 +84,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchIcon = "magnify", clearIcon
   );
 };
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -101,6 +104,6 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: '#fff'
   },
-});
+}));
 
 export default SearchBar;

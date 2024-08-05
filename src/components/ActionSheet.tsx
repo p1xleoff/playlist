@@ -2,6 +2,7 @@ import React, { useRef, forwardRef, useImperativeHandle } from 'react';
 import { View, Button, StyleSheet, Text, Pressable, Dimensions, ScrollView } from 'react-native';
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { pxStyles } from '../theme/useTheme';
 
 export interface SheetHandle {
   present: () => Promise<void>;
@@ -15,6 +16,7 @@ interface SheetComponentProps {
 }
 
 const Sheet = forwardRef<SheetHandle, SheetComponentProps>(({ children, title, sizes }, ref) => {
+  const styles = useStyles();  
   const sheet = useRef<TrueSheet>(null);
   const scrollview = useRef<ScrollView>(null)
   useImperativeHandle(ref, () => ({
@@ -28,7 +30,7 @@ const Sheet = forwardRef<SheetHandle, SheetComponentProps>(({ children, title, s
 
   return (
     <TrueSheet ref={sheet} sizes={["auto"]} cornerRadius={7}
-      backgroundColor="#111111"
+      style={styles.sheetContainer}
     >
         <View style={styles.sheetContainer}>
       <ScrollView ref={scrollview} nestedScrollEnabled>
@@ -45,10 +47,11 @@ const Sheet = forwardRef<SheetHandle, SheetComponentProps>(({ children, title, s
   );
 });
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   sheetContainer: {
     marginTop: 15,
-    marginBottom: 20
+    marginBottom: 20,
+    backgroundColor: theme.background
   },
   header: {
     flexDirection: 'row',
@@ -59,10 +62,10 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    color: '#e0e0e0',
+    color: theme.primary,
     fontSize: 24,
     fontWeight: 'bold',
-  }
-});
+  },
+}));
 
 export default Sheet;

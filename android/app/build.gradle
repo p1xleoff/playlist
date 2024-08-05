@@ -74,9 +74,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.playlist"
+    namespace "com.p1xle.playlist"
     defaultConfig {
-        applicationId "com.playlist"
+        applicationId "com.p1xle.playlist"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

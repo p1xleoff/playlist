@@ -4,17 +4,20 @@ import { getRelativeTime } from '../utils/dateTime';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
 import { ReGame } from '../services/auth/firebase';
+import { pxStyles } from '../theme/useTheme';
 
 interface CarouselProps {
     games: ReGame[];
 }
 
 const Carousel: React.FC<CarouselProps> = ({ games }) => {
+    const styles = useStyles();
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const itemWidth = Dimensions.get('window').width * 0.87;
     const flatListRef = useRef<FlatList<ReGame>>(null);
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-    
+
     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const offsetX = event.nativeEvent.contentOffset.x;
         const index = Math.round(offsetX / itemWidth);
@@ -33,13 +36,13 @@ const Carousel: React.FC<CarouselProps> = ({ games }) => {
     };
     const renderItem = ({ item }: { item: ReGame }) => (
         <View style={styles.gameItem}>
-            <Image source={{ uri: item.background_image }} style={styles.image} />
+            <Image source={{ uri: item.background_image }} style={{ flex: 1, resizeMode: 'cover', borderRadius: 5 }} />
             <TouchableOpacity onPress={() => handleGamePress(item)}
             >
-            <View style={{marginVertical: 5}}>
-                <Text style={styles.gameTitle} numberOfLines={1}>{item.name}</Text>
-                <Text style={styles.gameDate} numberOfLines={1}>{getRelativeTime(item.addedDate)}</Text>
-            </View>
+                <View style={{ marginVertical: 5 }}>
+                    <Text style={styles.gameTitle} numberOfLines={1}>{item.name}</Text>
+                    <Text style={styles.gameDate} numberOfLines={1}>{getRelativeTime(item.addedDate)}</Text>
+                </View>
             </TouchableOpacity>
         </View>
     );
@@ -73,7 +76,7 @@ const Carousel: React.FC<CarouselProps> = ({ games }) => {
 }
 
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
     container: {
         alignItems: 'center',
     },
@@ -86,18 +89,13 @@ const styles = StyleSheet.create({
     },
     gameTitle: {
         fontSize: 18,
-        color: '#ffffff',
+        color: theme.primary,
         fontWeight: '900',
     },
     gameDate: {
         fontSize: 16,
-        color: '#afafaf',
+        color: theme.secondary,
         fontWeight: 'bold',
-    },
-    image: {
-        flex: 1,
-        resizeMode: 'cover',
-        borderRadius: 5
     },
     indicatorContainer: {
         flexDirection: 'row',
@@ -109,13 +107,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 5
     },
     active: {
-        backgroundColor: '#f8f8f8',
+        backgroundColor: theme.primary,
         width: 6,
         height: 6,
     },
     inactive: {
-        backgroundColor: '#9b9b9b',
+        backgroundColor: theme.secondary,
     },
-})
+}));
 
 export default Carousel;

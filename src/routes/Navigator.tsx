@@ -21,10 +21,11 @@ import Collection from '../screens/Collection';
 import Dummy from '../screens/Dummy';
 import Data from '../screens/Data';
 import Acknowledgements from '../screens/Acknowledgements';
+import About from '../screens/About';
+import Changelog from '../screens/Changelog';
 
 // Types
 import { Franchise, Game } from '../types/Game';
-import { Loading } from '../components/Loading';
 
 export type RootStackParamList = {
   Tabs: undefined;
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   ListsStack: undefined;
   Discover: undefined;
   Settings: undefined;
+  About: undefined;
   Search: undefined;
   GameDetails: { game: Game | Franchise };
   Login: undefined;
@@ -43,6 +45,7 @@ export type RootStackParamList = {
   Dummy: undefined;
   Data: undefined;
   Account: undefined;
+  Changelog: undefined;
   Acknowledgements: undefined;
 };
 
@@ -132,6 +135,8 @@ const MainNavigator: React.FC<{ user: FirebaseAuthTypes.User | null }> = ({ user
               <Stack.Screen name="Dummy" component={Dummy} options={{ headerShown: false }} />
               <Stack.Screen name="Data" component={Data} options={{headerTitle: 'Data and Storage'}} />
               <Stack.Screen name="Acknowledgements" component={Acknowledgements} />
+              <Stack.Screen name="About" component={About} />
+              <Stack.Screen name="Changelog" component={Changelog} />
             </>
           ) : (
             <>

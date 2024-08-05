@@ -4,18 +4,22 @@ import SearchBar from '../components/SearchBar';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 import SearchResults from '../components/SearchResults';
+import { pxStyles } from '../theme/useTheme';
 
 type SearchProps = NativeStackScreenProps<RootStackParamList, 'Search'>
 
-const Search = ({navigation}: SearchProps) => {
+const Search = () => {
+  const styles = useStyles();
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-      <SearchBar autoFocus={true}  onChangeText={handleSearchChange}/>
+        <SearchBar autoFocus={true} onChangeText={handleSearchChange} />
       </View>
       {searchQuery.length > 0 && <SearchResults query={searchQuery} />}
     </View>
@@ -24,16 +28,13 @@ const Search = ({navigation}: SearchProps) => {
 
 export default Search
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: theme.background,
   },
   searchContainer: {
     marginHorizontal: 10,
     marginVertical: 10
   },
-  input: {
-    backgroundColor: 'black'
-  },
-})
+}));

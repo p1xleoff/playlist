@@ -16,12 +16,14 @@ import { IconSize } from '../utils/constants/enums/iconEnums';
 
 import { useField } from 'formik';
 import { useNavigation } from '@react-navigation/native';
+import { pxStyles } from '../theme/useTheme';
 
 //SEPARATOR
 type SeparatorProps = {
   style?: StyleProp<ViewStyle>;
 }
 const Separator = ({ style }: SeparatorProps) => {
+  const styles = useStyles();
   return <View style={[styles.separator, style]}></View>;
 };
 
@@ -33,6 +35,7 @@ type BadgeProps = {
 };
 
 const Badge = ({ children, style }: BadgeProps) => {
+  const styles = useStyles();
   return (
     <View>
       <Pressable style={[styles.badge, style]}>{children}</Pressable>
@@ -51,10 +54,11 @@ type LinkProps = {
 };
 
 const SettingsLink = ({ children, style, iconName, title, onPress }: LinkProps) => {
+  const styles = useStyles();
   return (
     <Pressable onPress={onPress} style={[styles.link, style]}>
       <View style={styles.linkGroup}>
-        <Icon name={iconName} size={IconSize.m} color="#f3f3f3" />
+        <Icon name={iconName} size={IconSize.m} style={styles.icon} />
         <Text style={styles.linkText}>{title}</Text>
       </View>
       {/* <Icon name='chevron-right' size={IconSize.m} color="#000000" /> */}
@@ -73,10 +77,10 @@ type RadioGroupProps = {
 }
 
 const RadioGroup = ({ options, selectedOption, style, onChange }: RadioGroupProps) => {
+  const styles = useStyles();
   const handleSelectOption = (value: string) => {
     onChange(value);
   }
-
   return (
     <View>
       {options.map((option) => (
@@ -101,6 +105,7 @@ interface InputProps extends TextInputProps {
 };
 
 const TxtInput: React.FC<InputProps> = ({ label, name, iconName, ...props }) => {
+  const styles = useStyles();
   const [field, meta] = useField(name);
   return (
     <View style={styles.inputContainer}>
@@ -126,6 +131,7 @@ type ButtonProps = {
   disabled?: boolean;
 };
 const Button = ({ style, title, onPress }: ButtonProps) => {
+  const styles = useStyles();
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
       <Text style={styles.buttonText}>{title}</Text>
@@ -139,6 +145,7 @@ type FloatBackProps = {
   onPress: () => void;
 }
 const FloatBack = ({ onPress }: FloatBackProps) => {
+  const styles = useStyles();
   return (
     <View style={styles.floatbutton}>
     <TouchableOpacity onPress={onPress}>
@@ -148,7 +155,7 @@ const FloatBack = ({ onPress }: FloatBackProps) => {
   )
 }
 
-const styles = StyleSheet.create({
+const useStyles = pxStyles((theme) => ({
   //separator
   separator: {
     height: 1,
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
 
   //badge
   badge: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.primary,
     padding: 7,
     marginRight: 10,
     borderRadius: 3,
@@ -176,13 +183,16 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 16,
-    color: '#f7f7f7',
+    color: theme.primary,
     fontWeight: '900',
     marginLeft: 15,
   },
   linkGroup: {
     flex: 1,
     flexDirection: 'row',
+  },
+  icon: {
+    color: theme.primary
   },
 
   //radio button
@@ -195,7 +205,7 @@ const styles = StyleSheet.create({
   },
   radioText: {
     fontSize: 20,
-    color: '#ffffff',
+    color: theme.primary,
     fontWeight: 'bold'
   },
   
@@ -230,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     // borderColor: '#ffffff',
     marginBottom: 4,
-    color: '#ffffff',
+    color: theme.primary,
     fontWeight: 'bold',
     fontSize: 18,
     paddingBottom: -2,
@@ -243,7 +253,7 @@ const styles = StyleSheet.create({
   //button
   button: {
     padding: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.primary,
     marginHorizontal: 10,
     marginVertical: 10,
     borderRadius: 3,
@@ -254,19 +264,19 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    color: '#000000',
+    color: theme.background,
     fontWeight: '900',
     letterSpacing: 1.5,
   },
 
   //float back
   floatbutton: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.primary,
     padding: 5,
     alignSelf: 'flex-start',
     borderRadius: 50,
     margin: 10
 },
-});
+}));
 
 export { Separator, Badge, SettingsLink, RadioGroup, TxtInput, Button, FloatBack };

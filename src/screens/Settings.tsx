@@ -33,8 +33,9 @@ import { useGameCount } from '../hooks/listHooks';
 
 import { Loading, SmallLoader } from '../components/Loading';
 import { pxStyles } from '../theme/useTheme';
-import { useTheme } from '../services/contexts/ThemeContext';
+
 import { formatDate } from '../utils/dateTime';
+import { useTheme } from '../theme/ThemeContext';
 
 
 type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
@@ -161,9 +162,9 @@ const Settings = ({ navigation }: SettingsProps) => {
               </Card>
 
               {/* notifications */}
-              <Card>
+              {/* <Card>
                 <SettingsLink onPress={handleNotifPress} iconName="bell" title="Notifications" />
-              </Card>
+              </Card> */}
             </View>
 
             {/* <View style={styles.category}>
@@ -176,7 +177,7 @@ const Settings = ({ navigation }: SettingsProps) => {
             {/* about */}
             <Card>
               <SettingsLink onPress={() => navigation.navigate('About')} iconName="information" title="About" />
-            </Card>
+            </Card>            
 
             {/* logOut */}
             <Card>

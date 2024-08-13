@@ -89,6 +89,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('playlist-key.keystore')
+            storePassword 'playlist'
+            keyAlias 'playlistKey'
+            keyPassword 'playlist'
+        }
     }
     buildTypes {
         debug {

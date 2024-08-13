@@ -60,7 +60,7 @@ const Home = ({ navigation }: HomeProps) => {
 
   return (
     <View style={styles.container}>
-      <Header title='playlist' />
+      <Header title='Playlist' />
       <ScrollView showsVerticalScrollIndicator={false}>
         <SearchBar />
         {noGamesInAnyList ? (

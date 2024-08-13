@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames, fetchGenres } from "../services/api/rawg";
+import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames, fetchGenres, fetchGamesByTags, fetchGamesByDeveloper, fetchGamesByGenres, fetchGamesByPlatforms } from "../services/api/rawg";
 import { Additions, BaseGame, Franchise, Game, GameStore, Screenshots, SeriesGame, Store } from "../types/Game";
 
 export const useSearchGames = (query: string) => {
@@ -58,6 +58,50 @@ export const useFetchSeriesGames = (gameId: number) => {
         queryFn: () => fetchSeriesGames(gameId),
     })
 };
+
+
+//hook for fetching games by developers
+export const usefetchDeveloperGames = (developer: string) => {
+    return useQuery({
+        queryKey: ['developerGames', developer],
+        queryFn: () => fetchGamesByDeveloper(developer),
+    })
+};
+
+//hook for fetching games by publishers
+export const usefetchPublisherGames = (publisher: string) => {
+    return useQuery({
+        queryKey: ['publisherGames', publisher],
+        queryFn: () => fetchGamesByDeveloper(publisher),
+    })
+};
+
+//hook for fetching games by genre from game details
+export const useFetchGenres = (genre: string) => {
+    return useQuery({
+        queryKey: ['genreGames', genre],
+        queryFn: () => fetchGamesByGenres(genre),
+        refetchOnWindowFocus: true,
+    });
+};
+
+//hook for fetching games by tag
+export const useFetchTaggedGames = (tag: string) => {
+    return useQuery({
+        queryKey: ['taggedGames', tag],
+        queryFn: () => fetchGamesByTags(tag),
+    })
+};
+
+//hook for fetching games by tag
+export const useFetchPlatformGames = (platform: number) => {
+    return useQuery({
+        queryKey: ['platformGames', platform],
+        queryFn: () => fetchGamesByPlatforms(platform),
+    })
+};
+
+
 
 //////DISCOVER STUFF
 

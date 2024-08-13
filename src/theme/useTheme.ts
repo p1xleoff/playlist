@@ -2,7 +2,8 @@
 
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 import { Theme } from './theme';
-import { useTheme } from '../services/contexts/ThemeContext';
+import { useTheme } from './ThemeContext';
+
 
 type ThemedStyles = {
   [key: string]: ViewStyle | TextStyle;

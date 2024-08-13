@@ -12,9 +12,9 @@ import { getRelativeTime } from '../utils/dateTime';
 import { FloatBack } from '../components/Utils';
 import { pxStyles } from '../theme/useTheme';
 
-type AllGamesProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;
+type CollectionProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;
 
-const AllGames = ({ navigation }: AllGamesProps) => {
+const Collection = ({ navigation }: CollectionProps) => {
     const styles = useStyles();
 
     const [allGames, setAllGames] = useState<{ game: ReGame, listId: string }[]>([]);
@@ -161,4 +161,4 @@ const useStyles = pxStyles((theme) => ({
     }
 }));
 
-export default AllGames;
+export default Collection;

@@ -7,25 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:875482013291:android:10cc90a11072ff35a21b2e",
-        "android_client_info": {
-          "package_name": "com.p1xle.playlist"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDtOilAdZ8TwgHi-GCmymLtDqF8BUzp3KQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:875482013291:android:76b2cb9fce88c0c5a21b2e",
         "android_client_info": {
           "package_name": "com.playlist"

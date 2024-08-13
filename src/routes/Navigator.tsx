@@ -23,6 +23,7 @@ import Data from '../screens/Data';
 import Acknowledgements from '../screens/Acknowledgements';
 import About from '../screens/About';
 import Changelog from '../screens/Changelog';
+import Games from '../screens/Games';
 
 // Types
 import { Franchise, Game } from '../types/Game';
@@ -46,6 +47,7 @@ export type RootStackParamList = {
   Data: undefined;
   Account: undefined;
   Changelog: undefined;
+  Games: { tag?: string, tagName?: string, developer?: string, publisher?: string, pubName?: string, devName?: string, genre?: string, genreName?: string, platform?: number, platName?: string };
   Acknowledgements: undefined;
 };
 
@@ -137,6 +139,7 @@ const MainNavigator: React.FC<{ user: FirebaseAuthTypes.User | null }> = ({ user
               <Stack.Screen name="Acknowledgements" component={Acknowledgements} />
               <Stack.Screen name="About" component={About} />
               <Stack.Screen name="Changelog" component={Changelog} />
+              <Stack.Screen name="Games" component={Games} />
             </>
           ) : (
             <>

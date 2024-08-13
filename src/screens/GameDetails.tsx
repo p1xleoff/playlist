@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image, ScrollView, Linking, Pressable, SafeAreaView } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
-import { useFetchScreenShots, useFetchGameDetails, useFetchGameStores, useFetchAddtions, useFetchBaseGame, useFetchSeriesGames } from '../hooks/gameHooks';
+import { View, Text, StyleSheet, ActivityIndicator, Image, ScrollView, Linking, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useFetchScreenShots, useFetchGameDetails, useFetchGameStores, useFetchAddtions, useFetchBaseGame, useFetchSeriesGames, useFetchTaggedGames } from '../hooks/gameHooks';
 import { Game, Franchise } from '../types/Game';
 import SearchBar from '../components/SearchBar';
 import { platformIcons, storeIcons } from '../data/iconMaps';
@@ -22,11 +22,12 @@ import { Loading } from '../components/Loading';
 import Reload from '../components/Reload';
 import { pxStyles } from '../theme/useTheme';
 
+
 const GameDetails: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'GameDetails'>>();
   const { game } = route.params;
-
   const styles = useStyles();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   // State for selected list
   const [selectedList, setSelectedList] = useState<string | null>(null);
@@ -34,6 +35,7 @@ const GameDetails: React.FC = () => {
   // Ref for the action sheet
   const sheetRef = useRef<SheetHandle>(null);
 
+  const [tag, setTag] = useState('');
 
   // Fetch game details
   const { data: gameDetails, error: gameDetailsError, isLoading: gameDetailsLoading, refetch: refetchGames } = useFetchGameDetails(game.id);
@@ -151,18 +153,32 @@ const GameDetails: React.FC = () => {
           </View>
 
           <View style={styles.infoCard}>
-            <View style={styles.infos}>
-              <Text style={styles.key}>Developer</Text>
-              <Text style={styles.value}>
-                {gameDetails.developers.map(developer => developer.name).join(', ') || 'N/A'}
-              </Text>
-            </View>
 
             <View style={styles.infos}>
-              <Text style={styles.key}>Publisher</Text>
-              <Text style={styles.value}>
-                {gameDetails.publishers.map(publisher => publisher.name).join(', ') || 'N/A'}
-              </Text>
+              <Text style={styles.key}>Developers</Text>
+              <View style={styles.devContainer}>
+                {gameDetails.developers.map((developer, index) => (
+                  <TouchableOpacity key={index} onPress={() => navigation.navigate('Games', { developer: developer.slug, devName: developer.name })}>
+                    <Text style={styles.value}>
+                      {developer.name}{index < gameDetails.developers.length - 1 ? ', ' : ''}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+
+
+            <View style={styles.infos}>
+              <Text style={styles.key}>Publishers</Text>
+              <View style={styles.devContainer}>
+                {gameDetails.publishers.map((publisher, index) => (
+                  <TouchableOpacity key={index} onPress={() => navigation.navigate('Games', { publisher: publisher.slug, pubName: publisher.name })}>
+                    <Text style={styles.value}>
+                      {publisher.name}{index < gameDetails.publishers.length - 1 ? ', ' : ''}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
 
             <View style={styles.infos}>
@@ -301,7 +317,9 @@ const GameDetails: React.FC = () => {
             <Text style={styles.heading}>Available On</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {gameDetails.platforms.map((platform, index) => (
-                <Text style={styles.badge} key={index}>{platform.platform.name}</Text>
+                <TouchableOpacity key={index} onPress={() => navigation.navigate('Games', { platform: platform.platform.id, platName: platform.platform.name })}>
+                <Text style={styles.badge}>{platform.platform.name}</Text>
+                </TouchableOpacity>
               ))}
             </View>
           </View>
@@ -312,9 +330,11 @@ const GameDetails: React.FC = () => {
               <Text style={styles.heading}>Genres</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 {gameDetails.genres.map((genre, index) => (
-                  <Text style={styles.badge} key={index}>
-                    {genre.name}
-                  </Text>
+                  <TouchableOpacity key={index} onPress={() => navigation.navigate('Games', { genre: genre.slug, genreName: genre.name })}>
+                    <Text style={styles.badge} >
+                      {genre.name}
+                    </Text>
+                  </TouchableOpacity>
                 ))}
               </View>
               {/* <Text style={styles.desc}>{gameDetails.genres.map(genre => genre.name).join(', ')}</Text> */}
@@ -352,9 +372,11 @@ const GameDetails: React.FC = () => {
               <Text style={styles.heading}>Tags</Text>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 {gameDetails.tags.map((tag, index) => (
-                  <Text style={styles.badge} key={index}>
-                    {tag.name}
-                  </Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Games', { tag: tag.slug, tagName: tag.name })}
+                    key={index} >
+                    <Text style={styles.badge}>{tag.name}</Text>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>
@@ -437,6 +459,15 @@ const useStyles = pxStyles((theme) => ({
     flexDirection: 'row',
     marginBottom: 5,
   },
+  devContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
+  underline: {
+    textDecorationLine: 'underline',
+  },
   key: {
     fontWeight: 'bold',
     fontSize: 16,
@@ -449,6 +480,10 @@ const useStyles = pxStyles((theme) => ({
     fontWeight: 'bold',
     flexWrap: 'wrap',
     color: theme.primary
+  },
+  devBar: {
+    flex: 1,
+    textAlign: 'right',
   },
   desc: {
     color: theme.secondary,

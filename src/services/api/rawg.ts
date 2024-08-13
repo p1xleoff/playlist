@@ -3,7 +3,7 @@ import axios from "axios";
 import { Game, Screenshots, GameStore } from "../../types/Game";
 import { getDateRanges } from "../../utils/dateTime";
 //get API key from RAWG API
-const API_KEY = 'API_kEY';
+const API_KEY = 'API_KEY';
 const BASE_URL = 'https://api.rawg.io/api';
 
 export const fetchGames = async () => {

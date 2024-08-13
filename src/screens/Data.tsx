@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Alert, StyleSheet, StatusBar, TouchableOpacity, Text, Share } from 'react-native';
+import { View, Button, Alert, StyleSheet, StatusBar, TouchableOpacity, Text, Share, Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,6 +15,7 @@ const Data = ({ navigation }: DataProps) => {
     const styles = useStyles()
     const userId = auth().currentUser?.uid;
 
+    //function to delete collection
     const handleDeleteAllGames = async () => {
         if (userId) {
             Alert.alert(
@@ -39,9 +40,15 @@ const Data = ({ navigation }: DataProps) => {
         }
     };
 
+    //function to open app settings
+    const openStorageSettings = () => {
+        Linking.openSettings();
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
+
                 <View style={styles.card}>
                     <Text style={styles.title}>Delete Games Collection</Text>
                     <Text style={styles.text}>This action will permanantly delete all your games from the app and clear the online cloud storage. There will be no way to restore it.</Text>
@@ -51,6 +58,21 @@ const Data = ({ navigation }: DataProps) => {
                         <Icon name="delete-outline" color='tomato' size={24} />
                     </TouchableOpacity>
                 </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.title}>Clear Cache</Text>
+                    <Text style={styles.text}>
+                        The app size may become too big if the cache is not cleared.
+                    </Text>
+                    <Text style={styles.text}>
+                        Go to Storage & Cache and tap Clear Cache to clear the app cache.
+                    </Text>
+                    <TouchableOpacity style={styles.links} onPress={openStorageSettings}>
+                        <Text style={styles.linkText}>Clear Cache</Text>
+                        <Icon name="database-remove-outline" color='tomato' size={24} />
+                    </TouchableOpacity>
+                </View>
+
             </View>
         </View>
     );
@@ -80,15 +102,15 @@ const useStyles = pxStyles((theme) => ({
         backgroundColor: theme.card,
         elevation: 10,
         padding: 15,
-        borderRadius: 7,
+        borderRadius: 3,
         marginVertical: 10,
     },
     links: {
         flexDirection: 'row',
         backgroundColor: theme.primary,
         elevation: 10,
-        padding: 15,
-        borderRadius: 7,
+        padding: 10,
+        borderRadius: 3,
         justifyContent: 'space-between',
         marginVertical: 10,
     },

@@ -18,7 +18,7 @@ const Changelog = () => {
                     <Text style={styles.badgeText}>v1.0</Text>
                 </View>
                 <View>
-                    <Text>
+                    <Text style={styles.text}>
                         {'\u25CF'} Initial build
                     </Text>
                 </View>
@@ -38,5 +38,10 @@ const useStyles = pxStyles((theme) => ({
     badgeText: {
         fontWeight: 'bold',
         fontSize: 18,
+        color: theme.primary
     },
+    text: {
+        color: theme.primary,
+        fontWeight: '500'
+    }
 }));

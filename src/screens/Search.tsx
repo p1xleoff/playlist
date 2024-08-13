@@ -1,9 +1,14 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
-import SearchBar from '../components/SearchBar';
+import { View } from 'react-native';
+import React, { useState } from 'react';
+
+//navigation
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
+
+//components
+import SearchBar from '../components/SearchBar';
 import SearchResults from '../components/SearchResults';
+
 import { pxStyles } from '../theme/useTheme';
 
 type SearchProps = NativeStackScreenProps<RootStackParamList, 'Search'>

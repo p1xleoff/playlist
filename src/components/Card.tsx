@@ -1,5 +1,6 @@
-import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native'
+import { View, ViewStyle, StyleProp } from 'react-native'
 import React from 'react'
+
 import { pxStyles } from '../theme/useTheme';
 
 type CardProps = {

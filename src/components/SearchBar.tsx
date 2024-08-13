@@ -1,8 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, StyleSheet, Pressable, Keyboard } from 'react-native';
+import { View, TextInput, Pressable, Keyboard } from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//navigation
 import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
+
 import { pxStyles } from '../theme/useTheme';
 
 interface SearchBarProps {

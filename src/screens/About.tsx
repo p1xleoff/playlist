@@ -1,8 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
+import React from 'react';
+
+//styles
 import { pxStyles } from '../theme/useTheme';
 import { IconSize } from '../utils/constants/enums/iconEnums';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 

@@ -1,9 +1,16 @@
-import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
-import { getRelativeTime } from '../utils/dateTime';
+
+//navigation
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
+
+//firebase
 import { ReGame } from '../services/auth/firebase';
+
+//hooks and functions
+import { getRelativeTime } from '../utils/dateTime';
+
 import { pxStyles } from '../theme/useTheme';
 
 interface CarouselProps {

@@ -1,8 +1,13 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import React from 'react'
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 import { pxStyles } from '../theme/useTheme';
+
+//components
 import Card from '../components/Card';
 
 type ChangelogProps = NativeStackScreenProps<RootStackParamList, 'Changelog'>;

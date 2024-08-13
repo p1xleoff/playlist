@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { searchGames, fetchGames, fetchGameDetails, fetchScreenShots, fetchGameStores, fetchAdditions, fetchBaseGame, fetchSeriesGames, discoverGames, fetchNewGames, fetchPopularGames, fetchUpcomingGames, fetchGenres, fetchGamesByTags, fetchGamesByDeveloper, fetchGamesByGenres, fetchGamesByPlatforms } from "../services/api/rawg";
-import { Additions, BaseGame, Franchise, Game, GameStore, Screenshots, SeriesGame, Store } from "../types/Game";
+import { Franchise, Game, GameStore, Screenshots } from "../types/Game";
 
 export const useSearchGames = (query: string) => {
     return useQuery<Game[], Error>({

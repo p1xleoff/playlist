@@ -1,13 +1,14 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import { Text, View } from 'react-native'
+import React from 'react'
 
+//navigation
 import { useNavigation } from '@react-navigation/native'
-
-import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
-
-import { Button } from '../components/Utils';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import { Loader } from '../components/Loading';
+
+//components
+import { Button } from '../components/Utils';
+
 import { pxStyles } from '../theme/useTheme';
 
 

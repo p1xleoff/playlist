@@ -1,20 +1,30 @@
-import { StyleSheet, Text, View, FlatList, Image, Pressable, Button, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, Pressable, TouchableOpacity } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
+
+//firebase
 import auth from '@react-native-firebase/auth';
 import { deleteGameFromList, getCurrentUser, getUserLists, moveGameToList } from '../services/auth/firebase';
-import { ReGame } from '../services/auth/firebase'; // Update the import
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
-import { Loading } from '../components/Loading';
+import { ReGame } from '../services/auth/firebase';
+
+//navigation
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
+
+//hooks and utils
 import { getRelativeTime } from '../utils/dateTime';
-import SearchBar from '../components/SearchBar';
+import { listIcons, listDesc, listColors } from '../data/ListMaps';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//components
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+import { Loading } from '../components/Loading';
+import SearchBar from '../components/SearchBar';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
 import Snackbar from 'react-native-snackbar';
-import { listIcons, listDesc, listColors } from '../data/ListMaps';
 import { Separator } from '../components/Utils';
 import Header from '../components/Header';
+
 import { pxStyles } from '../theme/useTheme';
 
 type ListsProps = NativeStackScreenProps<RootStackParamList, 'Lists'>;

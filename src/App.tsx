@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+
+//firebase
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+
+//navigation
+import { NavigationContainer } from '@react-navigation/native';
 import Navigator from './routes/Navigator';
 
-import { Loading } from './components/Loading';
 import { ThemeProvider } from './theme/ThemeContext';
 
 const App: React.FC = () => {

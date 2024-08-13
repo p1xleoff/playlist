@@ -1,25 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image, ScrollView, Linking, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, Linking, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
+
+//navigation
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useFetchScreenShots, useFetchGameDetails, useFetchGameStores, useFetchAddtions, useFetchBaseGame, useFetchSeriesGames, useFetchTaggedGames } from '../hooks/gameHooks';
-import { Game, Franchise } from '../types/Game';
-import SearchBar from '../components/SearchBar';
-import { platformIcons, storeIcons } from '../data/iconMaps';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import ScreenshotsCarousel from '../components/ScreenshotCarousel';
-import { esrb_rating } from '../data/esrb';
-import { GameCard } from '../components/GameCard';
 import { RootStackParamList } from '../routes/Navigator';
-import { Button, Separator } from '../components/Utils';
-import Sheet, { SheetHandle } from '../components/ActionSheet';
+
+//hooks and util functions
+import { useFetchScreenShots, useFetchGameDetails, useFetchGameStores, useFetchAddtions, useFetchBaseGame, useFetchSeriesGames } from '../hooks/gameHooks';
+import { esrb_rating } from '../data/esrb';
+import { platformIcons, storeIcons } from '../data/iconMaps';
+import { listOptions, listLabels } from '../data/ListMaps';
+
+//firebase
 import { addGameToList, getGameList } from '../services/auth/firebase';
 import auth from '@react-native-firebase/auth';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
+//components
+import { Franchise } from '../types/Game';
+import SearchBar from '../components/SearchBar';
+import ScreenshotsCarousel from '../components/ScreenshotCarousel';
+import { GameCard } from '../components/GameCard';
+import { Button } from '../components/Utils';
+import Sheet, { SheetHandle } from '../components/ActionSheet';
 import { RadioGroup } from '../components/Utils';
-import { listOptions, listLabels } from '../data/ListMaps';
 import Snackbar from 'react-native-snackbar';
 import { Loading } from '../components/Loading';
 import Reload from '../components/Reload';
+
 import { pxStyles } from '../theme/useTheme';
 
 

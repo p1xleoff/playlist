@@ -1,15 +1,13 @@
 import {
-  StyleSheet,
   Text,
   View,
   SafeAreaView,
   ScrollView,
-  Image,
   Linking,
   Pressable,
   TouchableOpacity
 } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 
 //navigation
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,24 +17,22 @@ import { RootStackParamList } from '../routes/Navigator';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { IconSize } from '../utils/constants/enums/iconEnums';
 
-//other
-import { signOut } from '../services/auth/firebase';
-
-//auth
+//firebase
 import auth from '@react-native-firebase/auth';
+import { signOut } from '../services/auth/firebase';
 
 //components
 import Card from '../components/Card';
-import { Separator, Badge, SettingsLink, RadioGroup, FloatBack } from '../components/Utils';
+import { Separator, Badge, SettingsLink, RadioGroup } from '../components/Utils';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
+import { SmallLoader } from '../components/Loading';
+
+//functions and hooks
 import { useGameCount } from '../hooks/listHooks';
-
-import { Loading, SmallLoader } from '../components/Loading';
-import { pxStyles } from '../theme/useTheme';
-
 import { formatDate } from '../utils/dateTime';
 import { useTheme } from '../theme/ThemeContext';
 
+import { pxStyles } from '../theme/useTheme';
 
 type SettingsProps = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 

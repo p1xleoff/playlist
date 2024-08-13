@@ -1,13 +1,21 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import React from 'react';
+
+//navigatoin
 import { useNavigation } from '@react-navigation/native';
-import { signUp } from '../services/auth/firebase';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import { Button } from '../components/Utils';
-import { Loader } from '../components/Loading';
+
+//firebase
+import { signUp } from '../services/auth/firebase';
+
+//hooks and functions
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+
+//components
+import { Button } from '../components/Utils';
+import { Loader } from '../components/Loading';
 import { pxStyles } from '../theme/useTheme';
 
 type SignupProps = NativeStackNavigationProp<RootStackParamList, 'Signup'>;

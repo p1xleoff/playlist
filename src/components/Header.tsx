@@ -1,10 +1,14 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import SearchBar from './SearchBar';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { pxStyles } from '../theme/useTheme';
+
 type HeaderProps = {
     title?: string;
     children?: JSX.Element | JSX.Element[];

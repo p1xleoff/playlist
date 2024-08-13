@@ -1,5 +1,6 @@
-import { ActivityIndicator, KeyboardAvoidingView, Platform, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, StyleProp, View, ViewStyle } from 'react-native'
 import React from 'react'
+
 import { pxStyles } from '../theme/useTheme';
 
 interface LoadingProps {

@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, Button, Alert, StyleSheet, StatusBar, TouchableOpacity, Text, Share, Linking } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { View, Alert, TouchableOpacity, Text, Linking } from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+//firebase
 import auth from '@react-native-firebase/auth';
 import { deleteCollectionGames } from '../services/auth/firebase';
+
 import { pxStyles } from '../theme/useTheme';
 
 type DataProps = NativeStackScreenProps<RootStackParamList, 'Data'>;

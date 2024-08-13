@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+
+//firebase
 import auth from '@react-native-firebase/auth';
 import { ReGame, getUserLists } from '../services/auth/firebase';
-import { Loading } from '../components/Loading';
+
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
+
+//utils
 import { listColors, listSort } from '../data/ListMaps';
+import { getRelativeTime } from '../utils/dateTime';
+
+//components
 import SearchBar from '../components/SearchBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { getRelativeTime } from '../utils/dateTime';
-import { FloatBack } from '../components/Utils';
+
 import { pxStyles } from '../theme/useTheme';
 
 type CollectionProps = NativeStackScreenProps<RootStackParamList, 'Collection'>;

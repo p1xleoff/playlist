@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, Pressable, FlatList } from 'react-native';
+
 import { Screenshots } from '../types/Game';
 
 interface ScreenshotsCarouselProps {

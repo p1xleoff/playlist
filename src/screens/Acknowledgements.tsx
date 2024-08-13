@@ -1,10 +1,14 @@
-import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+
+//components
 import Card from '../components/Card'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { FloatBack, Separator } from '../components/Utils'
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+
 import { pxStyles } from '../theme/useTheme'
 
 type AcknowledgementsProps = NativeStackScreenProps<RootStackParamList, 'Acknowledgements'>;

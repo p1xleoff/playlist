@@ -1,18 +1,25 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Header from '../components/Header';
-import SearchBar from '../components/SearchBar';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+//hooks and functions
 import { useDiscoverGames, usePopularGames, useUpcomingGames, useNewGames, useGenres } from '../hooks/gameHooks';
+import { DiscoverSortOptions, GenreOptions } from '../data/discoverMaps';
+
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import { pxStyles } from '../theme/useTheme';
+
+//components
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
 import { Loading } from '../components/Loading';
 import { DiscoverCard } from '../components/GameCard';
 import Sheet, { SheetHandle } from '../components/ActionSheet';
-import { RadioGroup } from '../components/Utils';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { DiscoverSortOptions, GenreOptions } from '../data/discoverMaps';
 import Reload from '../components/Reload';
-import { pxStyles } from '../theme/useTheme';
+import { RadioGroup } from '../components/Utils';
 
 type DiscoverProps = NativeStackScreenProps<RootStackParamList, 'Discover'>;
 

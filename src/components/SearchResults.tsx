@@ -1,14 +1,21 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, FlatList, Image, Pressable } from 'react-native';
-import { useSearchGames } from '../hooks/gameHooks';
-import { Game } from '../types/Game';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { platformIcons } from '../data/iconMaps';
+import { View, Text, FlatList, Image, Pressable } from 'react-native';
+
+//navigation
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
-import { Loading } from './Loading';
+
+//utils and hooks
+import { useSearchGames } from '../hooks/gameHooks';
+import { platformIcons } from '../data/iconMaps';
 import { pxStyles } from '../theme/useTheme';
+import { Game } from '../types/Game';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//components
+import { Loading } from './Loading';
 
 interface SearchResultsProps {
   query: string;

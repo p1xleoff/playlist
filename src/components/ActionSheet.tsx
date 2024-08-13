@@ -1,7 +1,10 @@
 import React, { useRef, forwardRef, useImperativeHandle } from 'react';
-import { View, Button, StyleSheet, Text, Pressable, Dimensions, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+
 import { TrueSheet } from '@lodev09/react-native-true-sheet';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { pxStyles } from '../theme/useTheme';
 
 export interface SheetHandle {

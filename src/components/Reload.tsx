@@ -1,8 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Header from './Header';
-import SearchBar from './SearchBar';
+
 import { pxStyles } from '../theme/useTheme';
 
 

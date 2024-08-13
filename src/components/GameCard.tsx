@@ -1,11 +1,20 @@
-import { Image, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { Franchise, Game } from '../types/Game'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Button } from './Utils';
-import { platformIcons } from '../data/iconMaps';
+import { Image, Pressable, Text, View } from 'react-native';
+import React from 'react';
+
+
+//navigation
 import { NavigationProp, StackActions, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../routes/Navigator';
+
+//utils and functions
+import { Game } from '../types/Game';
+import { platformIcons } from '../data/iconMaps';
+
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//components
+import { Button } from './Utils';
+
 import { pxStyles } from '../theme/useTheme';
 
 interface GameCardProps {

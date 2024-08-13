@@ -1,19 +1,22 @@
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
+//navigation
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../routes/Navigator';
 
+//auth
 import auth from '@react-native-firebase/auth';
 
+//custom components
 import SearchBar from '../components/SearchBar';
 import Carousel from '../components/Carousel';
-import { Button } from '../components/Utils';
 import Header from '../components/Header';
-
 import { ReGame, getUserLists } from '../services/auth/firebase';
 import { Loading } from '../components/Loading';
 import { dashList } from '../data/ListMaps';
+
+//styles
 import { pxStyles } from '../theme/useTheme';
 
 //type cheking
@@ -35,7 +38,7 @@ const Home = ({ navigation }: HomeProps) => {
       const unsubscribe = getUserLists(userId, (listData) => {
         const gamesByList: { [key: string]: ReGame[] } = {};
         listData.forEach((list: any) => {
-          gamesByList[list.id] = list.games.slice(0, 3); //select 3 games from the list
+          gamesByList[list.id] = list.games.slice(0, 5); //select 5 games from the list
         });
         setGames(gamesByList);
         setLoading(false);

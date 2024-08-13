@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text } from 'react-native';
+
+//auth
 import auth from '@react-native-firebase/auth'
+
+//components
 import { SmallLoader } from '../components/Loading';
-import { useGameCount, useListGameCounts } from '../hooks/listHooks';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { listColors, listIcons } from '../data/ListMaps';
+
 import { pxStyles } from '../theme/useTheme';
+
+//utils
+import { listColors, listIcons } from '../data/ListMaps';
+import { useGameCount, useListGameCounts } from '../hooks/listHooks';
 import { formatDate } from '../utils/dateTime';
 
 const Account = () => {

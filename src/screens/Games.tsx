@@ -1,14 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import SearchBar from '../components/SearchBar';
+import React from 'react';
+import { View, Text, FlatList } from 'react-native';
+
+//navigation
 import { RootStackParamList } from '../routes/Navigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useGenres, useFetchTaggedGames, usefetchDeveloperGames, usefetchPublisherGames, useFetchGenres, useFetchPlatformGames } from '../hooks/gameHooks';
+import { RouteProp, useRoute } from '@react-navigation/native';
+
+//hooks and util functions
+import { useFetchTaggedGames, usefetchDeveloperGames, usefetchPublisherGames, useFetchGenres, useFetchPlatformGames } from '../hooks/gameHooks';
+
+//components
 import { Loading } from '../components/Loading';
 import { DiscoverCard } from '../components/GameCard';
 import Reload from '../components/Reload';
+
 import { pxStyles } from '../theme/useTheme';
-import { RouteProp, useRoute } from '@react-navigation/native';
 
 type GamesProps = NativeStackScreenProps<RootStackParamList, 'Games'>;
 

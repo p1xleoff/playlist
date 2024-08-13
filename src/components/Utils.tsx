@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   Pressable,
@@ -9,13 +8,14 @@ import {
   TextInput,
   TextInputProps
 } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+//utils and functions
+import { useField } from 'formik';
 import { IconSize } from '../utils/constants/enums/iconEnums';
 
-import { useField } from 'formik';
-import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { pxStyles } from '../theme/useTheme';
 
 //SEPARATOR

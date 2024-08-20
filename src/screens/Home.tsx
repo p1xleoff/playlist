@@ -25,7 +25,7 @@ type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 //main functional component
 const Home = ({ navigation }: HomeProps) => {
   const styles = useStyles();
-  
+
   const [games, setGames] = useState<{ [key: string]: ReGame[] }>({});
   const [loading, setLoading] = useState(true);
   const userId = auth().currentUser?.uid;
@@ -38,7 +38,10 @@ const Home = ({ navigation }: HomeProps) => {
       const unsubscribe = getUserLists(userId, (listData) => {
         const gamesByList: { [key: string]: ReGame[] } = {};
         listData.forEach((list: any) => {
-          gamesByList[list.id] = list.games.slice(0, 5); //select 5 games from the list
+          const sortedGames = list.games.sort((a: ReGame, b: ReGame) => {
+            return new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime();
+          });
+          gamesByList[list.id] = sortedGames.slice(0, 5); //select 5 games from the list
         });
         setGames(gamesByList);
         setLoading(false);
